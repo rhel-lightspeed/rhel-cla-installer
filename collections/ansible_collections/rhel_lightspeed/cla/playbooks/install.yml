@@ -1,0 +1,10 @@
+- name: Setup RHEL CLA
+  hosts: okp
+  become: yes
+
+  vars:
+    okp_solr_port: 8983
+
+  tasks:
+    - import_role:
+        name: rhel_knowledge_bridge

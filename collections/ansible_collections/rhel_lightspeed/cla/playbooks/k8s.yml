@@ -1,0 +1,14 @@
+- name: Setup RHEL CLA in K8S
+  hosts: localhost
+  gather_facts: no
+  become: no
+
+  vars:
+    ansible_python_interpreter: /Users/sdoran/.pyenv/versions/rhel-cla-op/bin/python
+    ansible_operator_meta:
+      namespace: rhel-cla
+
+  tasks:
+    - import_role:
+        name: rhel_knowledge_bridge
+        tasks_from: k8s

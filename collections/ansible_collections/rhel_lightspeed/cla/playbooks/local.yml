@@ -1,0 +1,11 @@
+- name: Setup RHEL CLA locally
+  hosts: localhost
+  become: yes
+  gather_facts: no
+
+  vars:
+    okp_solr_port: 8983
+
+  tasks:
+    - import_role:
+        name: rhel_knowledge_bridge
