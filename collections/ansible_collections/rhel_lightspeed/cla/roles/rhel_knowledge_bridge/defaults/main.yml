@@ -1,0 +1,16 @@
+rkb_name: rhel-knowledge-bridge
+rkb_container_image: registry.redhat.io/rhel-cla/rhel-knowledge-bridge-rhel10
+rkb_container_image_tag: v1.0.2-1785450151
+rkb_state: present
+
+rkb_replicas: 1
+rkb_transport: streamable-http
+rkb_port: 8000
+rkb_log_level: INFO
+rkb_solr_url: http://redhat-okp:8983
+rkb_cpu_request: 250m
+rkb_cpu_limit: 1
+rkb_memory_request: 256Mi
+rkb_memory_limit: 512Mi
+rkb_pod_name: rhel-cla
+rkb_publish_port: 8501:8501

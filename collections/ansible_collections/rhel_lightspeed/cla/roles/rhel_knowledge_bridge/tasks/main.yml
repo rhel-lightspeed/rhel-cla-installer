@@ -1,0 +1,33 @@
+# Install prerequiset packages?
+
+# - name: Create users directory
+#   file:
+#     path: /etc/containers/systemd/users
+#     state: directory
+#     owner: root
+#     group: root
+#     mode: '0755'
+- name: Install
+  when: rkb_state != "absent"
+  block:
+    - name: Create pod
+      template:
+        src: units/{{ rkb_pod_name }}.pod.j2
+        dest: /etc/containers/systemd/{{ rkb_pod_name }}.pod
+      notify: kick the cans
+
+    - name: Create image
+      template:
+        src: units/rkb.image.j2
+        dest: /etc/containers/systemd/{{ rkb_name }}.image
+      notify: kick the cans
+
+    - name: Create container
+      template:
+        src: units/rkb.container.j2
+        dest: /etc/containers/systemd/{{ rkb_name }}.container
+      notify: kick the cans
+
+- name: Remove
+  include_tasks: remove.yml
+  when: rkb_state == "absent"

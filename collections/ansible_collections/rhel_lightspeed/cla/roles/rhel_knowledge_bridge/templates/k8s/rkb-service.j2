@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ rkb_name }}
+  labels:
+    service: rhel-lightspeed
+    app: {{ rkb_name }}
+spec:
+  sessionAffinity: ClientIP
+  ports:
+    - port: {{ rkb_port }}
+      protocol: TCP
+      targetPort: {{ rkb_port }}
+
+  selector:
+    app: {{ rkb_name }}
