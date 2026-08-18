@@ -1,0 +1,64 @@
+kind: Deployment
+apiVersion: v1
+metadata:
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ rkb_name }}
+
+spec:
+  replicas: {{ rkb_replicas }}
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: {{ rkb_name }}
+
+  template:
+    metadata:
+      labels:
+        service: rhel-lightspeed
+        app: {{ rkb_name }}
+
+    spec:
+      serviceAccountName: {{ rkb_name }}
+      containers:
+        - name: {{ rkb_name }}
+          image: {{ rkb_container_image }}:{{ rkb_container_image_tag }}
+          ports:
+            - containerPort: {{ rkb_port}}
+              protocol: TCP
+
+          env:
+            - name: MCP_TRANSPORT
+              value: {{ rkb_transport }}
+
+            - name: MCP_PORT
+              value: "{{ rkb_port }}"
+
+            - name: MCP_LOG_LEVEL
+              value: {{ rkb_log_level }}
+
+            - name: MCP_SOLR_URL
+              value: {{ rkb_solr_url }}
+
+          livenessProbe:
+            tcpSocket:
+              port: {{ rkb_port}}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+
+          readinessProbe:
+            tcpSocket:
+              port: {{ rkb_port}}
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: {{ rkb_cpu_request }}
+              memory: {{ rkb_memory_request }}
+            limits:
+              cpu: {{ rkb_cpu_limit }}
+              memory: {{ rkb_memory_limit }}

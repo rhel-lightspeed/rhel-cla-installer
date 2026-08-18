@@ -1,0 +1,10 @@
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+  listen: kick the cans
+
+- name: restart pod
+  systemd:
+    name: "{{ rkb_pod_name }}-pod"
+    state: restarted
+  listen: kick the cans

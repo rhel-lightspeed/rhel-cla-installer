@@ -1,0 +1,8 @@
+- name: Setup RHEL Knowledge bridge
+  kubernetes.core.k8s:
+    state: "{{ rkb_state }}"
+    template: templates/k8s/{{ item }}
+  loop:
+    - rkb-deployment.j2
+    - rkb-service-account.j2
+    - rkb-service.j2

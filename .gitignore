@@ -1,5 +1,5 @@
 .crush/
 .python-version
 
-roles/
-scratch/
+/roles/
+/scratch/

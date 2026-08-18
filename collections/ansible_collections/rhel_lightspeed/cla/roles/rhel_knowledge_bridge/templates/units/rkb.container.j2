@@ -1,0 +1,21 @@
+[Unit]
+Description=RHEL Knowledge Bridge (MCP Server)
+{# After={{ okp_name }}.service
+Requires={{ okp_name }}.service #}
+
+[Container]
+Image={{ rkb_name }}.image
+ContainerName={{ rkb_name }}
+Pod={{ rkb_pod_name }}.pod
+
+Environment=MCP_TRANSPORT={{ rkb_transport }}
+Environment=MCP_PORT={{ rkb_port }}
+Environment=MCP_LOG_LEVEL={{ rkb_log_level }}
+Environment=MCP_SOLR_URL=http://127.0.0.1:{{ okp_solr_port }}
+
+[Service]
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

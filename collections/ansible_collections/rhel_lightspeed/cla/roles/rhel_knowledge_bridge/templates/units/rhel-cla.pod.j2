@@ -1,0 +1,12 @@
+[Unit]
+Description=RHEL CLA Pod
+{# Documentation=https://github.com/your-org/rhel-cla-operator-demo #}
+Wants=network-online.target
+After=network-online.target
+
+[Pod]
+PodName={{ rkb_pod_name }}
+PublishPort={{ rkb_publish_port }}
+
+[Install]
+WantedBy=default.target
