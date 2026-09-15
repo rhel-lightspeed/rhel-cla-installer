@@ -1,0 +1,20 @@
+[Unit]
+Description=Red Hat Offline Knowledge Portal
+{# After={{ okp_name }}.service
+Requires={{ okp_name }}.service #}
+
+[Container]
+Image={{ okp_name }}.image
+ContainerName={{ okp_name }}
+Pod={{ okp_pod_name }}.pod
+
+Environment=ACCESS_KEY={{ okp_access_key.path }}
+Environment=SOLR_JETTY_HOST={{ okp_solr_jetty_host }}
+Environment=SOLR_LOG_LEVEL={{ okp_solr_log_level }}
+
+[Service]
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=default.target

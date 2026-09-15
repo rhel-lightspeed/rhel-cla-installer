@@ -1,0 +1,11 @@
+- name: reload systemd
+  systemd:
+    daemon_reload: yes
+  listen: kick the cans
+
+# What happens when multiple handlers across roles have the same name/listener?
+- name: restart pod
+  systemd:
+    name: "{{ okp_pod_name }}-pod"
+    state: restarted
+  listen: kick the cans

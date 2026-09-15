@@ -1,0 +1,14 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: "{{ okp_name }}-tar-wrapper"
+  labels:
+    service: rhel-lightspeed
+    app: "{{ okp_name }}"
+
+data:
+  tar: |
+    #!/bin/bash
+    echo "tar-wrapper: called with args: $*" >&2
+    /usr/bin/tar --no-same-owner --no-same-permissions --no-overwrite-dir --touch "$@" 2>&1 | grep -v 'Cannot change mode\|Cannot utime' >&2
+    exit 0

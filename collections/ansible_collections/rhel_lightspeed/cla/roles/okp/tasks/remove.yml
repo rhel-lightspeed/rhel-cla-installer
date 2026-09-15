@@ -1,0 +1,20 @@
+- name: Stop services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop:
+    - "{{ okp_pod_name }}-pod"
+    - "{{ okp_name }}-image"
+    - "{{ okp_name }}"
+  ignore_errors: yes
+
+- name: Remove unit files
+  file:
+    path: /etc/containers/systemd/{{ item }}
+    state: absent
+  loop:
+    - "{{ okp_pod_name }}.pod"
+    - "{{ okp_name }}.image"
+    - "{{ okp_name }}.container"
+  notify: reload systemd
