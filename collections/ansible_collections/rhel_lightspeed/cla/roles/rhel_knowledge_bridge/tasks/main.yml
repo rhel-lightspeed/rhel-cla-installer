@@ -22,6 +22,43 @@
         dest: /etc/containers/systemd/{{ rkb_name }}.container
       notify: reload systemd
 
+- name: Flush handlers before validation
+  meta: flush_handlers
+
+- name: Validate deployment
+  when: rkb_state != "absent"
+  block:
+    - name: Wait for image to be pulled
+      ansible.builtin.command:
+        cmd: podman image exists {{ rkb_container_image }}
+      changed_when: false
+      register: _rkb_image_check
+      retries: 30
+      delay: 10
+      until: _rkb_image_check.rc == 0
+      failed_when: false
+
+    - name: Show image pull logs on failure
+      when: _rkb_image_check.rc != 0
+      block:
+        - name: Get image pull service logs
+          ansible.builtin.command:
+            cmd: journalctl -u {{ rkb_name }}-image --no-pager -n 10
+          register: _rkb_image_logs
+          changed_when: false
+
+        - name: Fail with image pull details
+          ansible.builtin.fail:
+            msg: |
+              Image '{{ rkb_container_image }}' was not pulled after 5 minutes.
+              Service logs:
+              {{ _rkb_image_logs.stdout }}
+
+    - name: Ensure container service is started
+      ansible.builtin.systemd:
+        name: "{{ rkb_name }}"
+        state: started
+
 - name: Remove
   include_tasks: remove.yml
   when: rkb_state == "absent"
