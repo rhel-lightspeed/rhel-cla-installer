@@ -1,7 +1,7 @@
 [Unit]
 Description=RHEL Knowledge Bridge (MCP Server)
-{# After={{ okp_name }}.service
-Requires={{ okp_name }}.service #}
+After={{ okp_name }}.service
+Requires={{ okp_name }}.service
 
 [Container]
 Image={{ rkb_name }}.image
