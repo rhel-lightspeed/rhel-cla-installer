@@ -4,8 +4,8 @@
     state: stopped
     enabled: no
   loop:
-    - "{{ rkb_name }}-image"
-    - "{{ rkb_name }}"
+    - "{{ okp_name }}-image"
+    - "{{ okp_name }}"
   ignore_errors: yes
 
 - name: Remove unit files
@@ -13,6 +13,6 @@
     path: /etc/containers/systemd/{{ item }}
     state: absent
   loop:
-    - "{{ rkb_name }}.image"
-    - "{{ rkb_name }}.container"
+    - "{{ okp_name }}.image"
+    - "{{ okp_name }}.container"
   notify: reload systemd

@@ -1,0 +1,93 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: {{ okp_name }}
+  labels:
+    service: rhel-lightspeed
+    app: {{ okp_name }}
+spec:
+  replicas: {{ okp_replicas }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+  selector:
+    matchLabels:
+      app: {{ okp_name }}
+
+  template:
+    metadata:
+      annotations:
+        configmap-hash: "tar-wrapper-v5"
+      labels:
+        service: rhel-lightspeed
+        app: {{ okp_name }}
+
+    spec:
+      serviceAccountName: {{ okp_name }}
+      volumes:
+        - name: solr-data
+          emptyDir: {}
+
+        - name: tar-wrapper
+          configMap:
+            name: {{ okp_name }}-tar-wrapper
+            defaultMode: 0755
+
+      containers:
+        - name: {{ okp_name }}
+          image: {{ okp_container_image }}:{{ okp_container_image_tag }}
+          ports:
+            - containerPort: {{ okp_part }}
+              protocol: TCP
+
+          volumeMounts:
+            - name: solr-data
+              mountPath: /opt/solr/server/solr/portal/data
+
+            - name: tar-wrapper
+              mountPath: /usr/local/bin/tar
+              subPath: tar
+
+          env:
+            - name: ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ okp_access_key.name }}
+                  key: {{ okp_access_key.key }}
+
+            - name: SOLR_JETTY_HOST
+              value: {{ okp_solr_jetty_host }}
+
+            - name: SOLR_LOG_LEVEL
+              value: {{ okp_solr_log_level }}
+
+          startupProbe:
+            tcpSocket:
+              port: {{ okp_part }}
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 18
+
+          livenessProbe:
+            tcpSocket:
+              port: {{ okp_part }}
+            periodSeconds: 10
+            failureThreshold: 3
+
+          readinessProbe:
+            tcpSocket:
+              port: {{ okp_part }}
+            periodSeconds: 10
+            failureThreshold: 3
+
+          resources:
+            requests:
+              cpu: {{ okp_cpu_request }}
+              memory: {{ okp_memory_request }}
+
+            limits:
+              cpu: {{ okp_cpu_limit }}
+              memory: {{ okp_memory_limit }}

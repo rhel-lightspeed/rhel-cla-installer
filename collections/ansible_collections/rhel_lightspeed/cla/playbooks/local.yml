@@ -8,4 +8,10 @@
 
   tasks:
     - import_role:
+      name: cla_pod
+
+    - import_role:
         name: rhel_knowledge_bridge
+
+    - import_role:
+        name: okp
