@@ -4,7 +4,11 @@
 
   vars:
     okp_solr_port: 8983
+    okp_pod_name: rhel-cla
 
   tasks:
     - import_role:
         name: rhel_knowledge_bridge
+
+    - import_role:
+        name: okp
