@@ -1,23 +1,17 @@
 - name: Install
   when: okp_state != "absent"
   block:
-    - name: Create pod
-      template:
-        src: units/{{ okp_pod_name }}.pod.j2
-        dest: /etc/containers/systemd/{{ okp_pod_name }}.pod
-      notify: kick the cans
-
     - name: Create image
       template:
         src: units/okp.image.j2
         dest: /etc/containers/systemd/{{ okp_name }}.image
-      notify: kick the cans
+      notify: reload systemd
 
     - name: Create container
       template:
         src: units/okp.container.j2
         dest: /etc/containers/systemd/{{ okp_name }}.container
-      notify: kick the cans
+      notify: reload systemd
 
 - name: Remove
   include_tasks: remove.yml

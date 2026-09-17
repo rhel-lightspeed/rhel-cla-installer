@@ -4,7 +4,6 @@
     state: stopped
     enabled: no
   loop:
-    - "{{ rkb_pod_name }}-pod"
     - "{{ rkb_name }}-image"
     - "{{ rkb_name }}"
   ignore_errors: yes
@@ -14,7 +13,6 @@
     path: /etc/containers/systemd/{{ item }}
     state: absent
   loop:
-    - "{{ rkb_pod_name }}.pod"
     - "{{ rkb_name }}.image"
     - "{{ rkb_name }}.container"
   notify: reload systemd

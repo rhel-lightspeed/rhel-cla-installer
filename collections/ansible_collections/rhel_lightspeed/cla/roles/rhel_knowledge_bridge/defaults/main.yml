@@ -12,5 +12,3 @@ rkb_cpu_request: 250m
 rkb_cpu_limit: 1
 rkb_memory_request: 256Mi
 rkb_memory_limit: 512Mi
-rkb_pod_name: rhel-cla
-rkb_publish_port: 8501:8501

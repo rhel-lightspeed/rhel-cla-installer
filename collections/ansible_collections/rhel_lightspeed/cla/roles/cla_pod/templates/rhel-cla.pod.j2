@@ -1,11 +1,11 @@
 [Unit]
-Description=RHEL CLA Pod
+Description=RHEL CLA
 Wants=network-online.target
 After=network-online.target
 
 [Pod]
-PodName={{ rkb_pod_name }}
-PublishPort={{ rkb_publish_port }}
+PodName={{ cla_pod_name }}
+PublishPort={{ cla_publish_port }}
 
 [Install]
 WantedBy=default.target

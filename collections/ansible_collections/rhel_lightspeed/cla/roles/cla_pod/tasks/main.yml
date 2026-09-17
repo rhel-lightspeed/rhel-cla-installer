@@ -1,0 +1,24 @@
+- name: Install
+  when: cla_state != "absent"
+  block:
+    - name: Create pod
+      template:
+        src: "{{ cla_pod_name }}.pod.j2"
+        dest: /etc/containers/systemd/{{ cla_pod_name }}.pod
+      notify: reload systemd
+
+- name: Remove
+  when: okp_state == "absent"
+  block:
+    - name: Stop services
+      systemd:
+        name: "{{ cla_pod_name }}-pod"
+        state: stopped
+        enabled: no
+      ignore_errors: yes
+
+    - name: Remove pod
+      file:
+        path: /etc/containers/systemd/{{ cla_pod_name }}.pod
+        state: absent
+      notify: reload systemd

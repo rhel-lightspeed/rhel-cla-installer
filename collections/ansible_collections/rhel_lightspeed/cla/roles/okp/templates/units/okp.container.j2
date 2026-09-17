@@ -6,7 +6,7 @@ Requires={{ okp_name }}.service #}
 [Container]
 Image={{ okp_name }}.image
 ContainerName={{ okp_name }}
-Pod={{ okp_pod_name }}.pod
+Pod={{ cla_pod_name }}.pod
 
 Environment=ACCESS_KEY={{ okp_access_key.path }}
 Environment=SOLR_JETTY_HOST={{ okp_solr_jetty_host }}

@@ -3,7 +3,6 @@ okp_container_image: registry.redhat.io/offline-knowledge-portal/rhokp-rhel9
 okp_container_image_tag: 1.2.9-1784730494
 okp_state: present
 
-okp_pod_name: rhel-cla  # This probably needs to be one level up for all containers in the pod.
 okp_port: 8983
 okp_replicas: 1
 okp_cpu_request: 1

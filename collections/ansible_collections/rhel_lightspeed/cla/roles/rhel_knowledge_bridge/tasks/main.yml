@@ -10,23 +10,17 @@
 - name: Install
   when: rkb_state != "absent"
   block:
-    - name: Create pod
-      template:
-        src: units/{{ rkb_pod_name }}.pod.j2
-        dest: /etc/containers/systemd/{{ rkb_pod_name }}.pod
-      notify: kick the cans
-
     - name: Create image
       template:
         src: units/rkb.image.j2
         dest: /etc/containers/systemd/{{ rkb_name }}.image
-      notify: kick the cans
+      notify: reload systemd
 
     - name: Create container
       template:
         src: units/rkb.container.j2
         dest: /etc/containers/systemd/{{ rkb_name }}.container
-      notify: kick the cans
+      notify: reload systemd
 
 - name: Remove
   include_tasks: remove.yml
