@@ -8,11 +8,18 @@
     ansible_operator_meta:
       namespace: rhel-cla
 
+    okp_name: rh-offline-knowledge-portal
+    okp_solr_port: 8983
+
   tasks:
+    - import_role:
+        name: okp
+        tasks_from: k8s
+
     - import_role:
         name: rhel_knowledge_bridge
         tasks_from: k8s
 
     - import_role:
-        name: okp
+        name: lightspeed_stack
         tasks_from: k8s

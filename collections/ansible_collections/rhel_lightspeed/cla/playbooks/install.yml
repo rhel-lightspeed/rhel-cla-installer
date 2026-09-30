@@ -3,6 +3,7 @@
   become: yes
 
   vars:
+    okp_name: rh-offline-knowledge-portal
     okp_solr_port: 8983
 
   tasks:
@@ -10,7 +11,10 @@
         name: cla_pod
 
     - import_role:
+        name: okp
+
+    - import_role:
         name: rhel_knowledge_bridge
 
     - import_role:
-        name: okp
+        name: lightspeed_stack

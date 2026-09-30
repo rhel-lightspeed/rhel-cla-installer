@@ -1,0 +1,18 @@
+- name: Stop services
+  systemd:
+    name: "{{ item }}"
+    state: stopped
+    enabled: no
+  loop:
+    - "{{ ls_name }}-image"
+    - "{{ ls_name }}"
+  ignore_errors: yes
+
+- name: Remove unit files
+  file:
+    path: /etc/containers/systemd/{{ item }}
+    state: absent
+  loop:
+    - "{{ ls_name }}.image"
+    - "{{ ls_name }}.container"
+  notify: reload systemd
