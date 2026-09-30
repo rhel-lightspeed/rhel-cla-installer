@@ -1,0 +1,14 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: "${SERVICE_NAME}"
+  labels:
+    service: rhel-lightspeed
+    app: "${NAME}"
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    app: "${NAME}"

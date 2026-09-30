@@ -1,0 +1,10 @@
+ls_name: lightspeed-stack
+ls_container_image: quay.io/lightspeed-core/lightspeed-stack
+ls_container_image_tag: 0.7.0rc3
+ls_state: present
+ls_deployment_environment: production
+ls_port: 8080
+ls_log_level: INFO
+ls_default_provider:
+ls_default_model:
+ls_ogx_logging: "inference=info,providers=info,server=info,core=info,agents=info,tools=info"
