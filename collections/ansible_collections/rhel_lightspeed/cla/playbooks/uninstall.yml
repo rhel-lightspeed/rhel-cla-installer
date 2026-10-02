@@ -14,9 +14,16 @@
   tasks:
     - import_role:
         name: cla_pod
+        tasks_from: remove
 
     - import_role:
         name: rhel_knowledge_bridge
+        tasks_from: remove
 
     - import_role:
         name: okp
+        tasks_from: remove
+
+    - import_role:
+        name: lightspeed_stack
+        tasks_from: remove

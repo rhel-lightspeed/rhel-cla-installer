@@ -1,3 +1,2 @@
-cla_state: present
 cla_pod_name: rhel-cla
 cla_publish_port: 8501:8501

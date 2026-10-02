@@ -1,0 +1,12 @@
+- name: Stop services
+  systemd:
+    name: "{{ cla_pod_name }}-pod"
+    state: stopped
+    enabled: no
+  ignore_errors: yes
+
+- name: Remove pod
+  file:
+    path: /etc/containers/systemd/{{ cla_pod_name }}.pod
+    state: absent
+  notify: reload systemd

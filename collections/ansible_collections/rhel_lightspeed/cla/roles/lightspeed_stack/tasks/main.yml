@@ -1,34 +1,27 @@
-- name: Install
-  when: ls_state != "absent"
-  block:
-    - name: Create config directory
-      file:
-        path: /var/lib/containers/lightspeed-stack
-        state: directory
-        mode: '0755'
-        owner: root
-        group: root
+- name: Create config directory
+  file:
+    path: /var/lib/containers/lightspeed-stack
+    state: directory
+    mode: '0755'
+    owner: root
+    group: root
 
-    - name: Copy config files
-      template:
-        src: "{{ item }}"
-        dest: /var/lib/containers/{{ item }}
-      loop:
-        - lightspeed-stack.yml
-        - system_prompt.txt
+- name: Copy config files
+  template:
+    src: "{{ item }}"
+    dest: /var/lib/containers/{{ item }}
+  loop:
+    - lightspeed-stack.yml
+    - system_prompt.txt
 
-    - name: Create image
-      template:
-        src: units/ls.image.j2
-        dest: /etc/containers/systemd/{{ ls_name }}.image
-      notify: reload systemd
+- name: Create image
+  template:
+    src: units/ls.image.j2
+    dest: /etc/containers/systemd/{{ ls_name }}.image
+  notify: reload systemd
 
-    - name: Create container
-      template:
-        src: units/ls.container.j2
-        dest: /etc/containers/systemd/{{ ls_name }}.container
-      notify: reload systemd
-
-- name: Remove
-  include_tasks: remove.yml
-  when: ls_state == "absent"
+- name: Create container
+  template:
+    src: units/ls.container.j2
+    dest: /etc/containers/systemd/{{ ls_name }}.container
+  notify: reload systemd
