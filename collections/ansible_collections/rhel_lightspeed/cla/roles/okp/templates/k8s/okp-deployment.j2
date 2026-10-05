@@ -1,6 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  namespace: {{ ansible_operator_meta.namespace }}
   name: {{ okp_name }}
   labels:
     service: rhel-lightspeed
@@ -40,7 +41,7 @@ spec:
         - name: {{ okp_name }}
           image: {{ okp_container_image }}:{{ okp_container_image_tag }}
           ports:
-            - containerPort: {{ okp_part }}
+            - containerPort: {{ okp_port }}
               protocol: TCP
 
           volumeMounts:
@@ -66,20 +67,20 @@ spec:
 
           startupProbe:
             tcpSocket:
-              port: {{ okp_part }}
+              port: {{ okp_port }}
             initialDelaySeconds: 10
             periodSeconds: 10
             failureThreshold: 18
 
           livenessProbe:
             tcpSocket:
-              port: {{ okp_part }}
+              port: {{ okp_port }}
             periodSeconds: 10
             failureThreshold: 3
 
           readinessProbe:
             tcpSocket:
-              port: {{ okp_part }}
+              port: {{ okp_port }}
             periodSeconds: 10
             failureThreshold: 3
 
