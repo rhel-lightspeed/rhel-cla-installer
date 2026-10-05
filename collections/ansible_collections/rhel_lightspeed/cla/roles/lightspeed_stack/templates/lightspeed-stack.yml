@@ -38,11 +38,13 @@ customization:
 mcp_servers:
   - name: okp
     provider_id: model-context-protocol
-    url: http://okp-mcp:8000/mcp
+    # This is the in-namespace Service deployed by the rhel_knowledge_bridge role.
+    url: http://rhel-knowledge-bridge:8000/mcp
 
 deployment_environment: ${env.LS_DEPLOYMENT_ENVIRONMENT}
 
 splunk:
+  # Splunk is intentionally disabled for this local Kubernetes deployment.
   enabled: false
 
 user_data_collection:

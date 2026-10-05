@@ -1,10 +1,19 @@
 - name: Setup Lightspeed Stack
+  # Manifests set the target namespace; create ConfigMaps and Services before
+  # the Deployment so its first pod can mount its dependencies.
   kubernetes.core.k8s:
     state: "{{ ls_state }}"
     template: templates/k8s/{{ item }}
   loop:
     - ls-configmap.j2
-    - ls-deployment.j2
-    - ls-route.j2
-    - ls-service.j2
+    - ls-stack-config.j2
+    - ls-system-prompt.j2
     - ls-serviceaccount.j2
+    - ls-service.j2
+    - ls-deployment.j2
+
+- name: Create Lightspeed Stack OpenShift Route
+  kubernetes.core.k8s:
+    state: "{{ ls_state }}"
+    template: templates/k8s/ls-route.j2
+  when: ls_create_route | bool

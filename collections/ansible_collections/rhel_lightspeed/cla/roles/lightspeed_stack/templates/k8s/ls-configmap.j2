@@ -1,12 +1,13 @@
 kind: ConfigMap
 apiVersion: v1
 metadata:
-  name: "${NAME}-run-config"
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ ls_k8s_name }}-run-config
   annotations:
     qontract.recycle: "true"
   labels:
     service: rhel-lightspeed
-    app: "${NAME}"
+    app: {{ ls_k8s_name }}
 data:
   run.yaml: |
     version: 2
