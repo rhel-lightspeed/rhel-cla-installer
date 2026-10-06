@@ -1,6 +1,17 @@
 # https://github.com/operator-framework/ansible-operator-plugins/blob/main/images/ansible-operator/Dockerfile
 FROM quay.io/operator-framework/ansible-operator:v1.42.3
 
+
+USER 0
+RUN microdnf install -y \
+    tar \
+    && microdnf clean all \
+    && rm -rf /var/cache/dnf
+
+USER ${USER_UID}
+
+ENV PWD $HOME
+
 COPY ansible.cfg ${HOME}/ansible.cfg
 COPY requirements/requirements.yml ${HOME}/requirements.yml
 RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
