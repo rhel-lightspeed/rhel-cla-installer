@@ -1,0 +1,154 @@
+---
+kind: ConfigMap
+apiVersion: v1
+
+data:
+  tar: |
+    #!/bin/bash
+    echo "tar-wrapper: called with args: $*" >&2
+    /usr/bin/tar --no-same-owner --no-same-permissions --no-overwrite-dir --touch "$@" 2>&1 | grep -v 'Cannot change mode\|Cannot utime' >&2
+    exit 0
+
+
+metadata:
+  name: redhat-okp-tar-wrapper
+  labels:
+    app: redhat-okp
+    service: rhel-lightspeed
+    template: redhat-okp
+
+---
+kind: ServiceAccount
+apiVersion: v1
+
+metadata:
+  name: redhat-okp
+  labels:
+    app: redhat-okp
+    service: rhel-lightspeed
+    template: redhat-okp
+
+---
+kind: Deployment
+apiVersion: apps/v1
+
+metadata:
+  name: redhat-okp
+  labels:
+    app: redhat-okp
+    service: rhel-lightspeed
+    template: redhat-okp
+
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      app: redhat-okp
+
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+
+    type: RollingUpdate
+
+  template:
+    metadata:
+      annotations:
+        configmap-hash: tar-wrapper-v5
+
+      labels:
+        app: redhat-okp
+        service: rhel-lightspeed
+
+    spec:
+      containers:
+        - name: redhat-okp
+          image: registry.redhat.io/offline-knowledge-portal/rhokp-rhel9:latest
+
+          env:
+            - name: ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  key: access_key
+                  name: okp
+
+            - name: SOLR_JETTY_HOST
+              value: 0.0.0.0
+
+            - name: SOLR_LOG_LEVEL
+              value: INFO
+
+          livenessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            tcpSocket:
+              port: 8983
+
+          ports:
+            - containerPort: 8983
+              protocol: TCP
+
+          readinessProbe:
+            failureThreshold: 3
+            periodSeconds: 10
+            tcpSocket:
+              port: 8983
+
+          resources:
+            limits:
+              cpu: '2'
+              memory: 4Gi
+
+            requests:
+              cpu: '1'
+              memory: 2Gi
+
+          startupProbe:
+            failureThreshold: 18
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            tcpSocket:
+              port: 8983
+
+          volumeMounts:
+            - mountPath: /opt/solr/server/solr/portal/data
+              name: solr-data
+
+            - mountPath: /usr/local/bin/tar
+              name: tar-wrapper
+              subPath: tar
+
+      serviceAccountName: redhat-okp
+
+      volumes:
+        - emptyDir: {}
+          name: solr-data
+
+        - name: tar-wrapper
+          configMap:
+            defaultMode: 493
+            name: redhat-okp-tar-wrapper
+
+---
+kind: Service
+apiVersion: v1
+
+metadata:
+  name: redhat-okp
+  labels:
+    app: redhat-okp
+    service: rhel-lightspeed
+    template: redhat-okp
+
+spec:
+  ports:
+    - port: 8983
+      protocol: TCP
+      targetPort: 8983
+
+  selector:
+    app: redhat-okp
+
+  sessionAffinity: ClientIP
