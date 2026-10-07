@@ -1,6 +1,7 @@
 # https://github.com/operator-framework/ansible-operator-plugins/blob/main/images/ansible-operator/Dockerfile
 FROM quay.io/operator-framework/ansible-operator:v1.42.3
 
+ARG VERSION=2.0.0
 
 USER 0
 RUN microdnf install -y \
@@ -19,3 +20,5 @@ RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
 
 COPY watches.yaml ${HOME}/watches.yaml
 COPY collections/ansible_collections/rhel_lightspeed ${HOME}/collections/ansible_collections/rhel_lightspeed
+
+LABEL konflux.additional-tags=${VERSION}

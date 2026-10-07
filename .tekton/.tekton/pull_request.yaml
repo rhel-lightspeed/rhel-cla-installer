@@ -1,0 +1,39 @@
+apiVersion: tekton.dev/v1
+kind: PipelineRun
+metadata:
+  annotations:
+    build.appstudio.openshift.io/repo: https://github.com/rhel-lightspeed/rhel-cla-installer?rev={{ revision }}
+    build.appstudio.redhat.com/commit_sha: '{{ revision }}'
+    build.appstudio.redhat.com/target_branch: '{{ target_branch }}'
+    pipelinesascode.tekton.dev/cancel-in-progress: "false"
+    pipelinesascode.tekton.dev/max-keep-runs: "3"
+    pipelinesascode.tekton.dev/on-cel-expression: event == "pull_request" && target_branch == "main"
+
+  creationTimestamp: null
+
+  labels:
+    appstudio.openshift.io/application: rhel-cla-installer
+    appstudio.openshift.io/component: rhel-cla-installer
+    pipelines.appstudio.openshift.io/type: build
+
+  namespace: rhel-lightspeed-tenant
+  name: rhel-cla-installer-on-pull-request
+
+spec:
+  params:
+    - name: output-image
+      value: quay.io/redhat-user-workloads/rhel-lightspeed-tenant/rhel-cla-installer:pr-{{ pull_request_number }}-latest
+
+    - name: image-expires-after
+      value: 5d
+
+  pipelineRef:
+    name: pipeline-build-multiarch
+
+  taskRunTemplate:
+    serviceAccountName: build-pipeline-rhel-cla-installer
+
+  workspaces:
+    - name: git-auth
+      secret:
+        secretName: '{{ git_auth_secret }}'
