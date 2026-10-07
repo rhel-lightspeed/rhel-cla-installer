@@ -610,6 +610,7 @@ parameters:
     description: >-
       Name of the OpenShift secret containing PostgreSQL connection details.
       Expected keys: db.host, db.port, db.name, db.user, db.password.
+    value: rls-lscore-db
     required: true
 
   - name: SYSTEM_PROMPT
