@@ -1,15 +1,16 @@
 kind: Route
 apiVersion: route.openshift.io/v1
 metadata:
-  name: {{ ls_name }}
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ ls_k8s_name }}
   labels:
     service: rhel-lightspeed
-    app: {{ ls_name }}
+    app: {{ ls_k8s_name }}
 spec:
   to:
     kind: Service
-    name: "${SERVICE_NAME}"
+    name: {{ ls_service_name }}
   port:
-    targetPort: 8080
+    targetPort: http
   tls:
     termination: edge

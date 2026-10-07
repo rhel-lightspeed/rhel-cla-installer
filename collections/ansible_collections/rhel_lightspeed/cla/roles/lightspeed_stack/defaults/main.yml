@@ -2,9 +2,31 @@ ls_name: lightspeed-stack
 ls_container_image: quay.io/lightspeed-core/lightspeed-stack
 ls_container_image_tag: 0.7.0rc3
 ls_state: present
-ls_deployment_environment: production
-ls_port: 8080
-ls_log_level: INFO
-ls_default_provider:
-ls_default_model:
-ls_ogx_logging: "inference=info,providers=info,server=info,core=info,agents=info,tools=info"
+# These values feed ${env.*} references in the stack configuration. The env
+# lookups see exported variables only; use `set -a` when sourcing a .env file.
+ls_deployment_environment: "{{ lookup('env', 'LS_DEPLOYMENT_ENVIRONMENT') | default('production', true) }}"
+ls_port: "{{ lookup('env', 'LS_PORT') | default(8080, true) | int }}"
+ls_log_level: "{{ lookup('env', 'LIGHTSPEED_STACK_LOG_LEVEL') | default('INFO', true) }}"
+ls_default_provider: "{{ lookup('env', 'DEFAULT_PROVIDER') }}"
+ls_default_model: "{{ lookup('env', 'DEFAULT_MODEL') }}"
+ls_ogx_logging: "{{ lookup('env', 'LLAMA_STACK_LOGGING') | default('inference=info,providers=info,server=info,core=info,agents=info,tools=info', true) }}"
+ls_vertex_proxy_url: "{{ lookup('env', 'VERTEX_PROXY_URL') }}"
+
+# Kubernetes manifest settings. Map the deployment environment's variable
+# names for local Ansible runs; all of these can also be overridden with -e.
+# lookup('env', ...) only reads exported variables from the Ansible process.
+ls_k8s_name: "{{ lookup('env', 'NAME') | default(ls_name, true) }}"
+ls_service_name: "{{ lookup('env', 'SERVICE_NAME') | default(ls_k8s_name, true) }}"
+# OpenShift Routes are not a Kubernetes API. Enable this only on OpenShift.
+ls_create_route: false
+ls_replicas: "{{ lookup('env', 'REPLICAS') | default(1, true) | int }}"
+ls_deployment_version: "{{ lookup('env', 'DEPLOYMENT_VERSION') | default(ls_container_image_tag, true) }}"
+ls_k8s_image: "{{ lookup('env', 'IMAGE') | default(ls_container_image ~ ':' ~ ls_container_image_tag, true) }}"
+ls_sentry_secret_name: "{{ lookup('env', 'SENTRY_SECRET_NAME') | default('sentry', true) }}"
+ls_postgres_secret_name: "{{ lookup('env', 'POSTGRES_SECRET_NAME') | default('rls-lscore-db', true) }}"
+ls_vertexai_project_id: "{{ lookup('env', 'VERTEXAI_PROJECT_ID') }}"
+ls_vertex_ai_location: "{{ lookup('env', 'VERTEX_AI_LOCATION') }}"
+ls_cpu_request: "{{ lookup('env', 'CPU_REQUEST') | default('1', true) }}"
+ls_memory_request: "{{ lookup('env', 'MEMORY_REQUEST') | default('1Gi', true) }}"
+ls_cpu_limit: "{{ lookup('env', 'CPU_LIMIT') | default('2', true) }}"
+ls_memory_limit: "{{ lookup('env', 'MEMORY_LIMIT') | default('1Gi', true) }}"

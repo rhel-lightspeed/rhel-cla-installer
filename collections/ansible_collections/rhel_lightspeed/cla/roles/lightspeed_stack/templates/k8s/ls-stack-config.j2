@@ -1,0 +1,13 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ ls_k8s_name }}-stack-config
+  labels:
+    service: rhel-lightspeed
+    app: {{ ls_k8s_name }}
+# Keep the source config verbatim so its ${env.*} references are resolved by
+# Lightspeed Stack inside the container, not by Ansible during deployment.
+data:
+  lightspeed-stack.yaml: |
+{{ lookup('file', role_path ~ '/templates/lightspeed-stack.yml') | indent(4, true) }}

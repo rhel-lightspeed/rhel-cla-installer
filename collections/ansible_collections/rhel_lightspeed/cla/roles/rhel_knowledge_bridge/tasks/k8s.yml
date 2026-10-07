@@ -3,6 +3,6 @@
     state: "{{ rkb_state }}"
     template: templates/k8s/{{ item }}
   loop:
-    - rkb-deployment.j2
     - rkb-service-account.j2
     - rkb-service.j2
+    - rkb-deployment.j2

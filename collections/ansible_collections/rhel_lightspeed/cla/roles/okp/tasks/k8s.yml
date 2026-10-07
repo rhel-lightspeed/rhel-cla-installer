@@ -4,7 +4,7 @@
     template: templates/k8s/{{ item }}
   loop:
     - okp-configmap.j2
-    - okp-deployment.j2
     - okp-service-account.j2
     - okp-service.j2
+    - okp-deployment.j2
 

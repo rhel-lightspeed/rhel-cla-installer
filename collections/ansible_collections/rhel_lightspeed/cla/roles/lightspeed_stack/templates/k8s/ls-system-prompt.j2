@@ -1,0 +1,12 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ ls_k8s_name }}-system-prompt
+  labels:
+    service: rhel-lightspeed
+    app: {{ ls_k8s_name }}
+# Read the prompt verbatim; its date placeholder is interpreted by Lightspeed Stack.
+data:
+  system_prompt.txt: |
+{{ lookup('file', role_path ~ '/templates/system_prompt.txt') | indent(4, true) }}

@@ -1,31 +1,42 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
-  name: "${NAME}"
+  namespace: {{ ansible_operator_meta.namespace }}
+  name: {{ ls_k8s_name }}
   labels:
     service: rhel-lightspeed
-    app: "${NAME}"
+    app: {{ ls_k8s_name }}
 spec:
-  replicas: "${{REPLICAS}}"
+  replicas: {{ ls_replicas }}
   selector:
     matchLabels:
-      app: "${NAME}"
+      app: {{ ls_k8s_name }}
   template:
     metadata:
       annotations:
-        deployment-version: "${DEPLOYMENT_VERSION}"
+        deployment-version: {{ ls_deployment_version | to_json }}
+        # ConfigMap updates do not reach subPath mounts. Hash every mounted
+        # source so changing any of them rolls the Deployment.
+        stack-config-hash: {{ lookup('file', role_path ~ '/templates/lightspeed-stack.yml') | hash('sha256') | to_json }}
+        run-config-hash: {{ lookup('template', role_path ~ '/templates/k8s/ls-configmap.j2') | hash('sha256') | to_json }}
+        system-prompt-hash: {{ lookup('file', role_path ~ '/templates/system_prompt.txt') | hash('sha256') | to_json }}
       labels:
         service: rhel-lightspeed
-        app: "${NAME}"
+        app: {{ ls_k8s_name }}
     spec:
-      serviceAccountName: "${NAME}"
+      serviceAccountName: {{ ls_k8s_name }}
+      # Splunk is disabled in lightspeed-stack.yml, so no token Secret is needed.
       volumes:
+        # The app generates .generated/run.yaml at startup. Its image directory
+        # is not writable by the pod's runtime user, so keep this path writable.
+        - name: generated-config
+          emptyDir: {}
         - name: run-config
           configMap:
-            name: "${NAME}-run-config"
+            name: {{ ls_k8s_name }}-run-config
         - name: stack-config
           configMap:
-            name: "${NAME}-stack-config"
+            name: {{ ls_k8s_name }}-stack-config
         - name: gcp-credentials
           secret:
             secretName: vertexai
@@ -34,21 +45,17 @@ spec:
                 path: credentials.json
         - name: system-prompt
           configMap:
-            name: "${NAME}-system-prompt"
-        - name: splunk-token
-          secret:
-            secretName: "${SPLUNK_SECRET_NAME}"
-            items:
-              - key: token
-                path: token
-
+            name: {{ ls_k8s_name }}-system-prompt
       containers:
-        - name: "${NAME}"
-          image: "${IMAGE}"
+        - name: {{ ls_k8s_name }}
+          image: {{ ls_k8s_image | to_json }}
           ports:
-            - containerPort: 8080
+            - name: http
+              containerPort: {{ ls_port }}
               protocol: TCP
           volumeMounts:
+            - name: generated-config
+              mountPath: /app-root/.generated
             - name: run-config
               mountPath: /app-root/run.yaml
               subPath: run.yaml
@@ -61,35 +68,49 @@ spec:
               mountPath: /etc/gcp
               readOnly: true
             - name: system-prompt
-              mountPath: /etc/lightspeed
-              readOnly: true
-            - name: splunk-token
-              mountPath: /etc/splunk
+              # This matches customization.system_prompt_path in stack config.
+              mountPath: /app-root/system_prompt.txt
+              subPath: system_prompt.txt
               readOnly: true
 
           env:
+            # These variables resolve ${env.*} values from lightspeed-stack.yml.
             # ── Logging ──
             - name: LIGHTSPEED_STACK_LOG_LEVEL
-              value: "${LIGHTSPEED_STACK_LOG_LEVEL}"
+              value: {{ ls_log_level | to_json }}
             - name: LLAMA_STACK_LOGGING
-              value: "${LLAMA_STACK_LOGGING}"
+              value: {{ ls_ogx_logging | to_json }}
 
             # ── Sentry / GlitchTip ──
             - name: SENTRY_DSN
               valueFrom:
                 secretKeyRef:
-                  name: "${SENTRY_SECRET_NAME}"
+                  name: {{ ls_sentry_secret_name }}
                   key: dsn
+                  # Local deployments may omit Sentry entirely.
+                  optional: true
             - name: SENTRY_ENVIRONMENT
-              value: "${DEPLOYMENT_ENVIRONMENT}"
+              value: {{ ls_deployment_environment | to_json }}
 
             # ── Vertex AI ──
             - name: VERTEXAI_PROJECT_ID
-              value: "${VERTEXAI_PROJECT_ID}"
+              value: {{ ls_vertexai_project_id | to_json }}
             - name: VERTEX_AI_LOCATION
-              value: "${VERTEX_AI_LOCATION}"
+              value: {{ ls_vertex_ai_location | to_json }}
+            - name: VERTEX_PROXY_URL
+              value: {{ ls_vertex_proxy_url | to_json }}
+            - name: DEFAULT_PROVIDER
+              value: {{ ls_default_provider | to_json }}
+            - name: DEFAULT_MODEL
+              value: {{ ls_default_model | to_json }}
+            - name: LS_PORT
+              value: {{ ls_port | string | to_json }}
+            - name: LS_DEPLOYMENT_ENVIRONMENT
+              value: {{ ls_deployment_environment | to_json }}
             - name: GOOGLE_APPLICATION_CREDENTIALS
               value: /etc/gcp/credentials.json
+            - name: OTEL_SDK_DISABLED
+              value: "true"
 
             # ── Llama Stack internal storage ──
             # Llama Stack's distribution registry creates a SQLite
@@ -105,47 +126,47 @@ spec:
             - name: POSTGRES_HOST
               valueFrom:
                 secretKeyRef:
-                  name: "${POSTGRES_SECRET_NAME}"
+                  name: {{ ls_postgres_secret_name }}
                   key: db.host
             - name: POSTGRES_PORT
               valueFrom:
                 secretKeyRef:
-                  name: "${POSTGRES_SECRET_NAME}"
+                  name: {{ ls_postgres_secret_name }}
                   key: db.port
             - name: POSTGRES_DB
               valueFrom:
                 secretKeyRef:
-                  name: "${POSTGRES_SECRET_NAME}"
+                  name: {{ ls_postgres_secret_name }}
                   key: db.name
             - name: POSTGRES_USER
               valueFrom:
                 secretKeyRef:
-                  name: "${POSTGRES_SECRET_NAME}"
+                  name: {{ ls_postgres_secret_name }}
                   key: db.user
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: "${POSTGRES_SECRET_NAME}"
+                  name: {{ ls_postgres_secret_name }}
                   key: db.password
 
           livenessProbe:
             httpGet:
               path: /liveness
-              port: 8080
+              port: http
             initialDelaySeconds: 5
             periodSeconds: 10
             failureThreshold: 3
           readinessProbe:
             httpGet:
               path: /readiness
-              port: 8080
+              port: http
             initialDelaySeconds: 10
             periodSeconds: 30
             failureThreshold: 3
           resources:
             requests:
-              cpu: "${CPU_REQUEST}"
-              memory: "${MEMORY_REQUEST}"
+              cpu: {{ ls_cpu_request | to_json }}
+              memory: {{ ls_memory_request | to_json }}
             limits:
-              cpu: "${CPU_LIMIT}"
-              memory: "${MEMORY_LIMIT}"
+              cpu: {{ ls_cpu_limit | to_json }}
+              memory: {{ ls_memory_limit | to_json }}

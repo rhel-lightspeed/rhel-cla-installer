@@ -2,10 +2,10 @@ kind: Service
 apiVersion: v1
 metadata:
   namespace: {{ ansible_operator_meta.namespace }}
-    name: {{ okp_name }}
-    labels:
-      service: rhel-lightspeed
-      app: "${NAME}"
+  name: {{ okp_name }}
+  labels:
+    service: rhel-lightspeed
+    app: {{ okp_name }}
 
 spec:
   sessionAffinity: ClientIP
