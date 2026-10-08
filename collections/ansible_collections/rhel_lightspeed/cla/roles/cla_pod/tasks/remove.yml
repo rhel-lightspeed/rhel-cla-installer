@@ -9,4 +9,4 @@
   file:
     path: /etc/containers/systemd/{{ cla_pod_name }}.pod
     state: absent
-  notify: reload systemd
+  notify: cleanup

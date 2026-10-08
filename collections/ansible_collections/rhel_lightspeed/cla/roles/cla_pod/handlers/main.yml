@@ -1,3 +1,11 @@
+- name: reset-failed
+  command: systemctl reset-failed
+  become: yes
+  listen:
+    - cleanup
+
 - name: reload systemd
   systemd:
     daemon_reload: yes
+  listen:
+    - cleanup
