@@ -9,7 +9,7 @@
 - name: Copy config files
   template:
     src: "{{ item }}"
-    dest: /var/lib/containers/{{ item }}
+    dest: /var/lib/containers/lightspeed-stack/{{ item }}
   loop:
     - lightspeed-stack.yml
     - system_prompt.txt
