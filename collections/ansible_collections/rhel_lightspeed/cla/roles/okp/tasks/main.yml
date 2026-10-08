@@ -8,3 +8,11 @@
   notify: init
   tags:
     - okp
+
+- name: Start RHOKP
+  systemd:
+    name: "{{ okp_name }}"
+    state: started
+    daemon_reload: yes
+  tags:
+    - okp

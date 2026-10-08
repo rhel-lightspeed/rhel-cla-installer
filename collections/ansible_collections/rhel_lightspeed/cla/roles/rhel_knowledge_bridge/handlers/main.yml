@@ -1,4 +1,4 @@
-- name: Restart RHEL Knoweldge Bridge
+- name: Restart RHEL Knowledge Bridge
   systemd:
     name: "{{ rkb_name }}"
     state: restarted

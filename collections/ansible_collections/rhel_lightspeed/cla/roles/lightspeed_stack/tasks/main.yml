@@ -29,3 +29,11 @@
   notify: init
   tags:
     - ls
+
+- name: Start Lightspeed Stack
+  systemd:
+    name: "{{ ls_name }}"
+    state: started
+    daemon_reload: yes
+  tags:
+    - ls

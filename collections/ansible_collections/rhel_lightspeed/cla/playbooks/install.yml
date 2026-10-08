@@ -25,16 +25,3 @@
 
     - import_role:
         name: lightspeed_stack
-
-    - name: Reload systemd
-      systemd:
-        daemon_reload: yes
-      tags:
-        - always
-
-    - name: Start the pod
-      systemd:
-        name: "{{ cla_pod_name }}-pod"
-        state: started
-      tags:
-        - always

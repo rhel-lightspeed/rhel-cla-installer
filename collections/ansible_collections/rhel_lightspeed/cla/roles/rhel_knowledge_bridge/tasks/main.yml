@@ -10,3 +10,10 @@
     - rkb
 
 - import_tasks: validate.yml
+- name: Start RHEL Knowledge Bridge
+  systemd:
+    name: "{{ rkb_name }}"
+    state: started
+    daemon_reload: yes
+  tags:
+    - rkb

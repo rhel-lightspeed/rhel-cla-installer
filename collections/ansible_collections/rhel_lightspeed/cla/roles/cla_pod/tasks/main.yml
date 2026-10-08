@@ -5,3 +5,11 @@
   notify: init
   tags:
     - cla_pod
+
+- name: Start the pod
+  systemd:
+    name: "{{ cla_pod_name }}-pod"
+    state: started
+    daemon_reload: yes
+  tags:
+    - always
