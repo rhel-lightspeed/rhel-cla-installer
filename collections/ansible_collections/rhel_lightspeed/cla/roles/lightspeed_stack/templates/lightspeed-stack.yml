@@ -1,3 +1,4 @@
+# {{ ansible_managed }}
 name: lightspeed-stack
 
 service:
