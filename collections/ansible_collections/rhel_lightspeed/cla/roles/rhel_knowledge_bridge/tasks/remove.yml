@@ -1,21 +1,9 @@
-- name: Stop services
+- name: Stop service
   systemd:
-    name: "{{ item }}"
+    name: "{{ rkb_name }}"
     state: stopped
     enabled: no
-  loop:
-    - "{{ rkb_name }}-image"
-    - "{{ rkb_name }}"
   ignore_errors: yes
-  tags:
-    - rkb
-
-- name: Remove container image
-  command:
-    cmd: podman rmi {{ rkb_container_image }}
-  register: _rkb_rmi
-  changed_when: _rkb_rmi.rc == 0
-  failed_when: false
   tags:
     - rkb
 
@@ -27,5 +15,14 @@
     - "{{ rkb_name }}.image"
     - "{{ rkb_name }}.container"
   notify: cleanup
+  tags:
+    - rkb
+
+- name: Remove container image
+  command:
+    cmd: podman rmi {{ rkb_container_image }}
+  register: _rkb_rmi
+  changed_when: _rkb_rmi.rc == 0
+  failed_when: false
   tags:
     - rkb

@@ -1,4 +1,4 @@
-- name: Stop services
+- name: Stop the pod
   systemd:
     name: "{{ cla_pod_name }}-pod"
     state: stopped
