@@ -1,14 +1,10 @@
-- name: Create image
+- name: Copy unit files
   template:
-    src: units/okp.image.j2
-    dest: /etc/containers/systemd/{{ okp_name }}.image
+    src: "{{ item }}"
+    dest: /etc/containers/systemd/{{ item | basename | replace ('.j2', '' ) | replace('okp', okp_name) }}
+  loop:
+    - units/okp.image.j2
+    - units/okp.container.j2
   notify: reload systemd
-
-- name: Create container
-  template:
-    src: units/okp.container.j2
-    dest: /etc/containers/systemd/{{ okp_name }}.container
-  notify: reload systemd
-
   tags:
     - okp

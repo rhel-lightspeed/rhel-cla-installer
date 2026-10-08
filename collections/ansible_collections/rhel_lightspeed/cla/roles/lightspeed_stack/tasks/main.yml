@@ -15,19 +15,17 @@
   loop:
     - lightspeed-stack.yml
     - system_prompt.txt
-
-- name: Create image
-  template:
-    src: units/ls.image.j2
-    dest: /etc/containers/systemd/{{ ls_name }}.image
   notify: reload systemd
   tags:
     - ls
 
-- name: Create container
+- name: Copy unit files
   template:
-    src: units/ls.container.j2
-    dest: /etc/containers/systemd/{{ ls_name }}.container
+    src: "{{ item }}"
+    dest: /etc/containers/systemd/{{ item | basename | replace ('.j2', '' ) | replace('ls', ls_name) }}
+  loop:
+    - units/lightspeed-stack.image.j2
+    - units/lightspeed-stack.container.j2
   notify: reload systemd
   tags:
     - ls

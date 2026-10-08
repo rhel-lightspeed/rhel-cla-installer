@@ -1,22 +1,10 @@
-# Install prerequiset packages?
-
-# - name: Create users directory
-#   file:
-#     path: /etc/containers/systemd/users
-#     state: directory
-#     owner: root
-#     group: root
-#     mode: '0755'
-- name: Create image
+- name: Copy unit files
   template:
-    src: units/rkb.image.j2
-    dest: /etc/containers/systemd/{{ rkb_name }}.image
-  notify: reload systemd
-
-- name: Create container
-  template:
-    src: units/rkb.container.j2
-    dest: /etc/containers/systemd/{{ rkb_name }}.container
+    src: "{{ item }}"
+    dest: /etc/containers/systemd/{{ item | basename | replace('.j2', '',) | replace('rkb', rkb_name) }}
+  loop:
+    - units/rkb.container.j2
+    - units/rkb.image.j2
   notify: reload systemd
   tags:
     - rkb
