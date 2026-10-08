@@ -6,7 +6,7 @@
     cmd: podman image exists {{ rkb_container_image }}
   changed_when: false
   register: _rkb_image_check
-  retries: 30
+  retries: 12
   delay: 10
   until: _rkb_image_check.rc == 0
   ignore_errors: yes
