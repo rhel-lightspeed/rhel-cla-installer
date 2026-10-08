@@ -10,3 +10,5 @@
     dest: /etc/containers/systemd/{{ okp_name }}.container
   notify: reload systemd
 
+  tags:
+    - okp

@@ -18,5 +18,7 @@
     src: units/rkb.container.j2
     dest: /etc/containers/systemd/{{ rkb_name }}.container
   notify: reload systemd
+  tags:
+    - rkb
 
 - import_tasks: validate.yml

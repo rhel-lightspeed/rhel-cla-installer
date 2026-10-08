@@ -7,6 +7,8 @@
     - "{{ okp_name }}-image"
     - "{{ okp_name }}"
   ignore_errors: yes
+  tags:
+  - okp
 
 - name: Remove unit files
   file:
@@ -16,3 +18,5 @@
     - "{{ okp_name }}.image"
     - "{{ okp_name }}.container"
   notify: reload systemd
+  tags:
+  - okp

@@ -8,3 +8,5 @@
     - ls-route.j2
     - ls-service.j2
     - ls-serviceaccount.j2
+  tags:
+    - ls

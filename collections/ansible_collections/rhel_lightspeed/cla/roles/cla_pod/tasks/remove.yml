@@ -4,9 +4,13 @@
     state: stopped
     enabled: no
   ignore_errors: yes
+  tags:
+    - cla_pod
 
 - name: Remove pod
   file:
     path: /etc/containers/systemd/{{ cla_pod_name }}.pod
     state: absent
   notify: cleanup
+  tags:
+    - cla_pod
