@@ -10,7 +10,4 @@ okp_memory_request: 2Gi
 okp_memory_limit: 4Gi
 okp_solr_jetty_host: 0.0.0.0
 okp_solr_log_level: INFO
-okp_access_key:
-  name: okp
-  key: access_key
-  path: # Path on local system. Need to see if this is possible.
+okp_access_key: ~
