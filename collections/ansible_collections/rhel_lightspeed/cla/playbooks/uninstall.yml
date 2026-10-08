@@ -11,6 +11,20 @@
     ls_state: "{{ state }}"
     rkb_state: "{{ state }}"
 
+  handlers:
+    - name: reset-failed
+      command: systemctl reset-failed
+      changed_when: no
+      become: yes
+      listen:
+        - cleanup
+
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes
+      listen:
+        - cleanup
+
   tasks:
     - import_role:
         name: cla_pod

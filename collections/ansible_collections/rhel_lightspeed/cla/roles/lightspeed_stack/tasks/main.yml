@@ -15,7 +15,7 @@
   loop:
     - lightspeed-stack.yml
     - system_prompt.txt
-  notify: reload systemd
+  notify: init
   tags:
     - ls
 
@@ -26,6 +26,6 @@
   loop:
     - units/lightspeed-stack.image.j2
     - units/lightspeed-stack.container.j2
-  notify: reload systemd
+  notify: init
   tags:
     - ls

@@ -1,1 +1,6 @@
-../../cla_pod/handlers/main.yml
+- name: Restart RHOKP
+  systemd:
+    name: "{{ okp_name }}"
+    state: restarted
+  listen:
+    - init

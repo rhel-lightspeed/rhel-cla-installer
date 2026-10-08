@@ -3,8 +3,8 @@
     src: "{{ item }}"
     dest: /etc/containers/systemd/{{ item | basename | replace ('.j2', '' ) | replace('okp', okp_name) }}
   loop:
-    - units/okp.image.j2
     - units/okp.container.j2
-  notify: reload systemd
+    - units/okp.image.j2
+  notify: init
   tags:
     - okp

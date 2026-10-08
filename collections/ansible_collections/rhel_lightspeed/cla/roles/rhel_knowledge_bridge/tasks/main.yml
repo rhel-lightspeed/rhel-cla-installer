@@ -5,7 +5,7 @@
   loop:
     - units/rkb.container.j2
     - units/rkb.image.j2
-  notify: reload systemd
+  notify: init
   tags:
     - rkb
 

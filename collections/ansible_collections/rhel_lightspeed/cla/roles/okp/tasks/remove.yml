@@ -15,8 +15,8 @@
     path: /etc/containers/systemd/{{ item }}
     state: absent
   loop:
-    - "{{ okp_name }}.image"
     - "{{ okp_name }}.container"
-  notify: reload systemd
+    - "{{ okp_name }}.image"
+  notify: cleanup
   tags:
   - okp

@@ -2,6 +2,6 @@
   template:
     src: "{{ cla_pod_name }}.pod.j2"
     dest: /etc/containers/systemd/{{ cla_pod_name }}.pod
-  notify: reload systemd
+  notify: init
   tags:
     - cla_pod

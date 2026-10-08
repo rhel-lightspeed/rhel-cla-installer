@@ -1,11 +1,6 @@
-- name: reset-failed
-  command: systemctl reset-failed
-  become: yes
-  listen:
-    - cleanup
-
-- name: reload systemd
+- name: Restart RHEL CLA pod
   systemd:
-    daemon_reload: yes
+    name: "{{ cla_pod_name }}-pod"
+    state: restarted
   listen:
-    - cleanup
+    - init

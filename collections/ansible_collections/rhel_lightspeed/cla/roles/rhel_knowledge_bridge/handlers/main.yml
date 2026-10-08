@@ -1,1 +1,6 @@
-../../cla_pod/handlers/main.yml
+- name: Restart RHEL Knoweldge Bridge
+  systemd:
+    name: "{{ rkb_name }}"
+    state: restarted
+  listen:
+    - init

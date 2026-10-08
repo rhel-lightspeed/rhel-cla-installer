@@ -6,6 +6,13 @@
     okp_name: rh-offline-knowledge-portal
     okp_solr_port: 8983
 
+  handlers:
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes
+      listen:
+        - init
+
   tasks:
     - import_role:
         name: cla_pod
@@ -18,3 +25,16 @@
 
     - import_role:
         name: lightspeed_stack
+
+    - name: Reload systemd
+      systemd:
+        daemon_reload: yes
+      tags:
+        - always
+
+    - name: Start the pod
+      systemd:
+        name: "{{ cla_pod_name }}-pod"
+        state: started
+      tags:
+        - always

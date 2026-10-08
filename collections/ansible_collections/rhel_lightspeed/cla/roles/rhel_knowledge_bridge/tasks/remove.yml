@@ -26,6 +26,6 @@
   loop:
     - "{{ rkb_name }}.image"
     - "{{ rkb_name }}.container"
-  notify: reload systemd
+  notify: cleanup
   tags:
     - rkb

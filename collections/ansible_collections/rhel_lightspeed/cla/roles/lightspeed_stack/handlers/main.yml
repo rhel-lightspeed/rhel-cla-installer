@@ -1,1 +1,6 @@
-../../cla_pod/handlers/main.yml
+- name: Restart Lightspeed Stack
+  systemd:
+    name: "{{ ls_name }}"
+    state: restarted
+  listen:
+    - init
