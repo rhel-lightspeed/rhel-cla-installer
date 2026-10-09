@@ -3,3 +3,5 @@
 
 /roles/
 /scratch/
+/inventory/*
+!/inventory/hosts.example.yml
