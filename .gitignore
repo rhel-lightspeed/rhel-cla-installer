@@ -1,6 +1,7 @@
 .crush/
 .python-version
 
+/local
 /roles/
 /scratch/
 /inventory/*
