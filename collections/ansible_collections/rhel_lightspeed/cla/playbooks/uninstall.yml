@@ -2,15 +2,6 @@
   hosts: all
   become: yes
 
-  vars:
-    okp_name: rh-offline-knowledge-portal
-    okp_solr_port: 8983
-    state: absent
-    cla_state: "{{ state }}"
-    okp_state: "{{ state }}"
-    ls_state: "{{ state }}"
-    rkb_state: "{{ state }}"
-
   handlers:
     - name: reset-failed
       command: systemctl reset-failed
