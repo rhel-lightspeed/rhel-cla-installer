@@ -17,6 +17,6 @@
   loop:
     - "{{ ls_name }}.image"
     - "{{ ls_name }}.container"
-  notify: reload systemd
+  notify: cleanup
   tags:
     - ls

@@ -1,6 +1,0 @@
-- name: Restart RHEL CLA pod
-  systemd:
-    name: "{{ cla_pod_name }}-pod"
-    state: restarted
-  listen:
-    - init

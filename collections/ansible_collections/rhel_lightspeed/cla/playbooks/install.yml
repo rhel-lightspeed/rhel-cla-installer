@@ -7,8 +7,10 @@
     okp_solr_port: 8983
 
   handlers:
-    - name: reload systemd
+    - name: Restart RHEL CLA pod
       systemd:
+        name: "{{ cla_pod_name }}-pod"
+        state: restarted
         daemon_reload: yes
       listen:
         - init

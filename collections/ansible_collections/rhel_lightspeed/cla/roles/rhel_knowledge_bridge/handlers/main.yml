@@ -1,6 +1,0 @@
-- name: Restart RHEL Knowledge Bridge
-  systemd:
-    name: "{{ rkb_name }}"
-    state: restarted
-  listen:
-    - init
