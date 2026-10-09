@@ -1,9 +1,9 @@
-- name: Flush handlers before validation
+- name: VALIDATE - Flush handlers before validation
   meta: flush_handlers
   tags:
     - rkb
 
-- name: Wait for image to be pulled
+- name: VALIDATE - Wait for image to be pulled
   command: podman image exists {{ rkb_container_image }}
   changed_when: false
   register: _rkb_image_check
@@ -19,19 +19,19 @@
   tags:
     - rkb
   block:
-    - name: Get image pull service logs
+    - name: VALIDATE - Get image pull service logs
       command: journalctl -u {{ rkb_name }}-image --no-pager -n 10
       register: _rkb_image_logs
       changed_when: false
 
-    - name: Fail with image pull details
+    - name: VALIDATE - Fail with image pull details
       fail:
         msg: |
           Image '{{ rkb_container_image }}' was not pulled after 5 minutes.
           Service logs:
           {{ _rkb_image_logs.stdout }}
 
-- name: Ensure container service is started
+- name: VALIDATE - Ensure container service is started
   systemd:
     name: "{{ rkb_name }}"
     state: started
