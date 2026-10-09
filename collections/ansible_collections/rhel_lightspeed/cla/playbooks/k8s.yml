@@ -3,14 +3,6 @@
   gather_facts: no
   become: no
 
-  vars:
-    ansible_python_interpreter: /Users/sdoran/.pyenv/versions/rhel-cla-op/bin/python
-    ansible_operator_meta:
-      namespace: rhel-cla
-
-    okp_name: rh-offline-knowledge-portal
-    okp_solr_port: 8983
-
   tasks:
     - import_role:
         name: okp

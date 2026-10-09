@@ -1,10 +1,6 @@
 - name: Setup RHEL CLA
-  hosts: okp
+  hosts: all
   become: yes
-
-  vars:
-    okp_name: rh-offline-knowledge-portal
-    okp_solr_port: 8983
 
   handlers:
     - name: Restart RHEL CLA pod

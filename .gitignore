@@ -1,5 +1,8 @@
 .crush/
 .python-version
 
+/local
 /roles/
 /scratch/
+/inventory/*
+!/inventory/hosts.example.yml
