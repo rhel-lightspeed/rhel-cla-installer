@@ -24,8 +24,8 @@
     src: "{{ item }}"
     dest: /etc/containers/systemd/{{ item | basename | replace ('.j2', '' ) | replace('ls', ls_name) }}
   loop:
-    - units/lightspeed-stack.image.j2
-    - units/lightspeed-stack.container.j2
+    - units/ls.image.j2
+    - units/ls.container.j2
   notify: init
   tags:
     - ls
