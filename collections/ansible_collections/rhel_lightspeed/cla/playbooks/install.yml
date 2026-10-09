@@ -6,6 +6,15 @@
     okp_name: rh-offline-knowledge-portal
     okp_solr_port: 8983
 
+  handlers:
+    - name: Restart RHEL CLA pod
+      systemd:
+        name: "{{ cla_pod_name }}-pod"
+        state: restarted
+        daemon_reload: yes
+      listen:
+        - init
+
   tasks:
     - import_role:
         name: cla_pod

@@ -7,6 +7,8 @@
     - "{{ ls_name }}-image"
     - "{{ ls_name }}"
   ignore_errors: yes
+  tags:
+    - ls
 
 - name: Remove unit files
   file:
@@ -15,4 +17,6 @@
   loop:
     - "{{ ls_name }}.image"
     - "{{ ls_name }}.container"
-  notify: reload systemd
+  notify: cleanup
+  tags:
+    - ls

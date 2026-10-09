@@ -7,4 +7,5 @@
     - okp-deployment.j2
     - okp-service-account.j2
     - okp-service.j2
-
+  tags:
+    - okp

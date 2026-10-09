@@ -4,15 +4,19 @@
     state: stopped
     enabled: no
   loop:
-    - "{{ okp_name }}-image"
     - "{{ okp_name }}"
+    - "{{ okp_name }}-image"
   ignore_errors: yes
+  tags:
+  - okp
 
 - name: Remove unit files
   file:
     path: /etc/containers/systemd/{{ item }}
     state: absent
   loop:
-    - "{{ okp_name }}.image"
     - "{{ okp_name }}.container"
-  notify: reload systemd
+    - "{{ okp_name }}.image"
+  notify: cleanup
+  tags:
+  - okp

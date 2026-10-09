@@ -6,3 +6,5 @@
     - rkb-deployment.j2
     - rkb-service-account.j2
     - rkb-service.j2
+  tags:
+    - rkb

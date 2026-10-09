@@ -1,7 +1,6 @@
 rkb_name: rhel-knowledge-bridge
 rkb_container_image: registry.redhat.io/rhel-cla/rhel-knowledge-bridge-rhel10
 rkb_container_image_tag: v1.0.2-1785450151
-rkb_state: present
 
 rkb_replicas: 1
 rkb_transport: streamable-http
