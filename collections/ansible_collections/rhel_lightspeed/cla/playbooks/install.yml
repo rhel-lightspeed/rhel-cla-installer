@@ -1,5 +1,5 @@
 - name: Setup RHEL CLA
-  hosts: okp
+  hosts: all
   become: yes
 
   handlers:
