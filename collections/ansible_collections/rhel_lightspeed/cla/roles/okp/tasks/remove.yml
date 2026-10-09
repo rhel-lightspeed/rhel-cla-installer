@@ -4,8 +4,8 @@
     state: stopped
     enabled: no
   loop:
-    - "{{ okp_name }}-image"
     - "{{ okp_name }}"
+    - "{{ okp_name }}-image"
   ignore_errors: yes
   tags:
   - okp
