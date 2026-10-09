@@ -1,0 +1,35 @@
+- name: Remove a local RHEL CLA installation
+  hosts: localhost
+  become: yes
+  gather_facts: no
+
+  handlers:
+    - name: reset-failed
+      command: systemctl reset-failed
+      changed_when: no
+      become: yes
+      listen:
+        - cleanup
+
+    - name: reload systemd
+      systemd:
+        daemon_reload: yes
+      listen:
+        - cleanup
+
+  tasks:
+    - import_role:
+        name: cla_pod
+        tasks_from: remove
+
+    - import_role:
+        name: rhel_knowledge_bridge
+        tasks_from: remove
+
+    - import_role:
+        name: okp
+        tasks_from: remove
+
+    - import_role:
+        name: lightspeed_stack
+        tasks_from: remove
