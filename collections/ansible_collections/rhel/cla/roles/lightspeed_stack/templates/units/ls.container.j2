@@ -27,8 +27,9 @@ Environment=POSTGRES_DB={{ ls_postgres_db }}
 Environment=POSTGRES_USER={{ ls_postgres_user }}
 Environment=POSTGRES_PASSWORD={{ ls_postgres_password }}
 
-Volume=/var/lib/containers/lightspeed_stack.yml:/app-root/lightspeed_stack.yml
-Volume=/var/lib/containers/system_prompt.txt:/app-root/system_prompt.txt
+Volume={{ ls_config_dir }}/lightspeed_stack-{{ _ls_major_version }}.yml:/app-root/lightspeed_stack.yaml:Z
+Volume={{ ls_config_dir }}/run.yml:/app-root/run.yaml:Z
+Volume={{ ls_config_dir }}/system_prompt.txt:/app-root/system_prompt.txt:Z
 
 [Service]
 Restart=on-failure
