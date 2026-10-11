@@ -103,8 +103,8 @@ spec:
 
     - name: additional-tags-from-label
       description: Additional tags to apply to the image read from Containerfile label
-      type: array
-      default: []
+      type: string
+      default: ""
 
   results:
     - name: IMAGE_URL
@@ -570,8 +570,7 @@ spec:
             - $(params.tag-prefix)$(tasks.clone-repository.results.short-commit)
 
         - name: ADDITIONAL_TAGS_FROM_LABEL
-          value:
-            - $(params.additional-tags-from-label[*])
+          value: $(params.additional-tags-from-label)
 
       runAfter:
         - build-image-index
