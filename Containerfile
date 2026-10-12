@@ -4,12 +4,13 @@ FROM quay.io/operator-framework/ansible-operator:v1.42.3
 ARG VERSION=2.0.0
 
 USER 0
-RUN microdnf install -y \
-    tar \
+RUN microdnf upgrade -y \
+    && microdnf install -y \
+        tar \
     && microdnf clean all \
     && rm -rf /var/cache/dnf
 
-USER ${USER_UID}
+USER $USER_UID
 
 ENV PWD $HOME
 
