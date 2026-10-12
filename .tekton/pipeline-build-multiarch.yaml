@@ -241,6 +241,10 @@ spec:
         - name: IMAGE_EXPIRES_AFTER
           value: $(params.image-expires-after)
 
+        - name: BUILD_ARGS_FILES
+          value:
+            - $(params.build-args-file)
+
         - name: PRIVILEGED_NESTED
           value: $(params.privileged-nested)
 
@@ -258,10 +262,6 @@ spec:
 
         - name: IMAGE_APPEND_PLATFORM
           value: "true"
-
-        - name: BUILD_ARGS_FILES
-          value:
-            - $(params.build-args-file)
       runAfter:
         - prefetch-dependencies
 
