@@ -1,5 +1,5 @@
 # https://github.com/operator-framework/ansible-operator-plugins/blob/main/images/ansible-operator/Dockerfile
-FROM quay.io/operator-framework/ansible-operator:v1.42.3
+FROM quay.io/operator-framework/ansible-operator:v1.42.3@sha256:96053ae3e045c4eb57350cbf1995dece22bf7d3bfe4cf875a20d8853963a3731
 
 ARG VERSION=2.0.0
 
