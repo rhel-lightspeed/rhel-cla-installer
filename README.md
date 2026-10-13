@@ -7,6 +7,13 @@ This is the installer for the self-managed RHEL CLA. It supports local, remote i
 - Python 3.11 or later
 - [`podman`]
 - A [Red Hat Offline Knowledge Portal key][rhokp_key]
+- Valid login credentials in `/etc/containers/auth.json`.
+
+Create the required login credentials. This needs to be done on both local and remote systems, or the auth file can be generated once and copied to remote systems.
+
+```
+sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
+```
 
 ## Local Installation ##
 
