@@ -18,20 +18,18 @@ sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
 
 ## Local Installation ##
 
+1. Create a directory for the installer and its configuration.
+
+    ```
+    mkdir rhel-cla-installer
+    cd rhel-cla-installer
+    ```
+
 1. Extract the installer from the container image in order to run it against `localhost`.
 
     ```
-    ./scripts/extract.sh
-    ```
-
-    This will extract the installer from the container into a single executable to a `local` directory.
-
-    If any errors are encountered when extracting the installer, run `bash -s scripts/extract.sh` to see more verbose output.
-
-    It is possible to override `IMAGE` and `CONTAINER_RUNTIME` if needed.
-
-    ```
-    CONTAINER_RUNTIME=docker ./scripts/extract.sh
+    export IMAGE=quay.io/redhat-user-workloads/rhel-lightspeed-tenant/rhel-cla-installer
+    podman run --rm -i --entrypoint sh "$IMAGE" -c 'tar -cf - ansible.cfg rhel-cla-installer' | tar -xf -
     ```
 
 1. Configure inventory.
