@@ -16,7 +16,7 @@ RUN pip3 install --no-cache-dir -r /opt/setup/requirements-3.12.txt
 
 # Download galaxy collections — ansible-galaxy writes to
 COPY requirements/requirements.yml /opt/setup/requirements.yml
-RUN ansible-galaxy collection install -r /opt/setup/requirements.yml
+RUN ansible-galaxy collection install -r /opt/setup/requirements.yml -p /opt/setup/collections
 
 # Add the local rhel namespace alongside the downloaded collections.
 COPY collections/ansible_collections/rhel \
@@ -24,14 +24,14 @@ COPY collections/ansible_collections/rhel \
 
 COPY scripts/build-zipapp.py /opt/setup/
 
-RUN python3 /opt/setup/build-zipapp.py
+RUN /opt/setup/build-zipapp.py
 
 
 FROM registry.access.redhat.com/ubi10-minimal:10.2-1791784796
 
 ARG VERSION=2.0.0
 
-RUN microdnf install tar -y --nodocs && \
+RUN microdnf install tar -y --nodocs --setopt install_weak_deps=0 && \
     microdnf clean all && \
     rm -rf /var/cache/dnf
 
@@ -39,16 +39,14 @@ USER 65532
 
 WORKDIR /opt/ansible
 
-COPY ansible.cfg                              ansible.cfg
-COPY watches.yaml                             watches.yaml
-COPY collections/ansible_collections/rhel     collections/ansible_collections/rhel
-COPY --from=builder /opt/rhel-cla-installer   rhel-cla-installer
+COPY ansible.cfg ansible.cfg
+COPY collections/ansible_collections/rhel collections/ansible_collections/rhel
+COPY --from=builder /opt/rhel-cla-installer rhel-cla-installer
 
 # License required by Red Hat preflight certification.
-COPY LICENSE /licenses/LICENSE
-
-# Thirdy-party licenses required by Red Hat preflight certification.
-COPY licenses /licenses/3rdparty/
+#   * LICENSE is the license for this project.
+#   * licenses is the license for the ansible-galaxy collections used by this project.
+COPY LICENSE licenses /licenses/
 
 LABEL com.redhat.application=rhel-cla-installer
 LABEL com.redhat.component=rhel-cla-installer
@@ -61,6 +59,6 @@ LABEL name="rhel-cla/installer-rhel10"
 LABEL cpe="cpe:/a:redhat:rhel_cla:1.0::el10"
 LABEL url="https://github.com/rhel-lightspeed/rhel-cla-installer"
 LABEL vendor="Red Hat, Inc."
-LABEL summary="Red Hat Enterprise Linux (RHEL) command line assistant"
+LABEL summary="Red Hat Enterprise Linux (RHEL) command line assistant installer"
 LABEL konflux.additional-tags=$VERSION
 LABEL version=$VERSION
