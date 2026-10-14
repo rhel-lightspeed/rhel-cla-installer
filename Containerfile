@@ -1,42 +1,66 @@
-# https://github.com/operator-framework/ansible-operator-plugins/blob/main/images/ansible-operator/Dockerfile
-FROM quay.io/operator-framework/ansible-operator:v1.42.3 AS final
+# ──────────────────────────────────────────────────────────────────────────────
+# builder: Hummingbird Python 3.12 builder image.
+#
+# Has bash, dnf/dnf5, and pip — everything needed, including `dnf install` on
+# s390x for gcc/libffi-devel/openssl-devel/python3-devel/rust-toolset.
+# This stage is ephemeral; only /opt/rhel-cla-installer is copied out.
+# ──────────────────────────────────────────────────────────────────────────────
+FROM registry.access.redhat.com/hi/python:3.12-builder AS builder
+
+USER 0
+
+# Install ansible-core so ansible-galaxy is available. The upper bound matches
+# requirements.in; the exact version is frozen in requirements-3.12.txt.
+COPY requirements/*.txt      /opt/setup/
+RUN pip3 install --no-cache-dir -r /opt/setup/requirements-3.12.txt
+
+# Download galaxy collections — ansible-galaxy writes to
+COPY requirements/requirements.yml /opt/setup/requirements.yml
+RUN ansible-galaxy collection install -r /opt/setup/requirements.yml
+
+# Add the local rhel namespace alongside the downloaded collections.
+COPY collections/ansible_collections/rhel \
+     /opt/setup/collections/ansible_collections/rhel
+
+COPY scripts/build-zipapp.py /opt/setup/
+
+RUN python3 /opt/setup/build-zipapp.py
+
+
+FROM registry.access.redhat.com/ubi10-minimal:10.2-1791784796
 
 ARG VERSION=2.0.0
 
-USER 0
-RUN microdnf install -y \
-    tar \
-    && microdnf clean all \
-    && rm -rf /var/cache/dnf
+RUN microdnf install tar -y --nodocs && \
+    microdnf clean all && \
+    rm -rf /var/cache/dnf
 
-USER ${USER_UID}
+USER 65532
 
-ENV PWD $HOME
+WORKDIR /opt/ansible
 
-COPY ansible.cfg ${HOME}/ansible.cfg
-COPY requirements/requirements.yml ${HOME}/requirements.yml
-RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
- && chmod -R ug+rwx ${HOME}/.ansible
+COPY ansible.cfg                              ansible.cfg
+COPY watches.yaml                             watches.yaml
+COPY collections/ansible_collections/rhel     collections/ansible_collections/rhel
+COPY --from=builder /opt/rhel-cla-installer   rhel-cla-installer
 
-COPY watches.yaml ${HOME}/watches.yaml
-COPY collections/ansible_collections/rhel ${HOME}/collections/ansible_collections/rhel
+# License required by Red Hat preflight certification.
+COPY LICENSE /licenses/LICENSE
 
+# Thirdy-party licenses required by Red Hat preflight certification.
+COPY licenses /licenses/3rdparty/
+
+LABEL com.redhat.application=rhel-cla-installer
+LABEL com.redhat.component=rhel-cla-installer
+LABEL description="Red Hat Enterprise Linux (RHEL) command line assistant installer"
+LABEL distribution-scope=private
+LABEL io.k8s.description="Red Hat Enterprise Linux (RHEL) command line assistant"
+LABEL io.k8s.display-name="Red Hat Enterprise Linux (RHEL) command line assistant installer"
+LABEL io.openshift.tags="rhel,command-line-assistant,installer"
+LABEL name="rhel-cla/installer-rhel10"
+LABEL cpe="cpe:/a:redhat:rhel_cla:1.0::el10"
+LABEL url="https://github.com/rhel-lightspeed/rhel-cla-installer"
+LABEL vendor="Red Hat, Inc."
+LABEL summary="Red Hat Enterprise Linux (RHEL) command line assistant"
 LABEL konflux.additional-tags=$VERSION
 LABEL version=$VERSION
-
-COPY licenses/ /licenses/
-
-
-# 2026-10-13
-FROM registry.access.redhat.com/ubi10/ubi:10.2-1791893534@sha256:a75ad754aa048d808dd3260243452f8c9a665831d0493b4c9d92f0c88fe2f8c3 AS builder
-
-USER 0
-
-COPY --from=final /opt/ansible/collections /opt/setup/collections
-COPY requirements/*.txt /opt/setup/
-COPY scripts/build-zipapp.py /opt/setup/
-RUN /opt/setup/build-zipapp.py
-
-
-FROM final
-COPY --from=builder /opt/rhel-cla-installer ${HOME}/rhel-cla-installer
