@@ -10,11 +10,26 @@ FROM registry.access.redhat.com/hi/python:3.12-builder@sha256:d7e47ff8d9d9b612ea
 USER 0
 
 COPY .konflux/pip/*.txt /opt/setup/
+
+# Galaxy collections: build-zipapp.py installs them into the collections
+# layout with ansible-galaxy. Konflux hermetic builds install the tarballs
+# prefetched by Hermeto's generic fetcher (requirements/artifacts.lock.yaml)
+# with --offline; local builds install the collections pinned in
+# requirements/requirements.yml from galaxy.ansible.com. The pip
+# requirements are installed by build-zipapp.py into dedicated virtual
+# environments; under hermetic builds they are served from the prefetched
+# dependency store (PIP_FIND_LINKS/PIP_NO_INDEX).
+COPY requirements/requirements.yml /opt/setup/requirements.yml
+
+# Add the local rhel namespace alongside the downloaded collections.
+COPY collections/ansible_collections/rhel \
+     /opt/setup/collections/ansible_collections/rhel
+
 COPY scripts/build-zipapp.py /opt/setup/
 # Add the local rhel namespace alongside the downloaded collections.
 COPY collections/ansible_collections/rhel /opt/setup/collections/ansible_collections/rhel
 
-RUN /opt/setup/build-zipapp.py
+RUN python3 /opt/setup/build-zipapp.py
 
 
 FROM registry.access.redhat.com/ubi10-minimal:10.2-1791784796@sha256:9712ae522acef7e90c571280b4faf69614b59395448d6bfb1c780c3bbf168218
