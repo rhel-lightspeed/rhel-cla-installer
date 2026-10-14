@@ -29,7 +29,7 @@ COPY scripts/build-zipapp.py /opt/setup/
 # Add the local rhel namespace alongside the downloaded collections.
 COPY collections/ansible_collections/rhel /opt/setup/collections/ansible_collections/rhel
 
-RUN python3 /opt/setup/build-zipapp.py
+RUN /opt/setup/build-zipapp.py
 
 
 FROM registry.access.redhat.com/ubi10-minimal:10.2-1791784796@sha256:9712ae522acef7e90c571280b4faf69614b59395448d6bfb1c780c3bbf168218
