@@ -6,6 +6,7 @@ This is the installer for the self-managed RHEL CLA. It supports local, remote i
 
 - Python 3.11 or later
 - [`podman`]
+- `tar`
 - A [Red Hat Offline Knowledge Portal key][rhokp_key]
 - 30GB of free disk space for the Red Hat Offline Knowledge Portal.
 - Valid login credentials in `/etc/containers/auth.json`.
@@ -29,7 +30,7 @@ sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
 
     ```
     export IMAGE=quay.io/redhat-user-workloads/rhel-lightspeed-tenant/rhel-cla-installer
-    podman run --rm -i --entrypoint sh "$IMAGE" -c 'tar -cf - ansible.cfg rhel-cla-installer' | tar -xf -
+    podman run --rm -i --entrypoint sh "$IMAGE" -c 'tar -cf - ansible.cfg rhel-cla-installer inventory' | tar -xf -
     ```
 
 1. Configure inventory.
