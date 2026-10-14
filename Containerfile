@@ -14,6 +14,7 @@ USER ${USER_UID}
 ENV PWD $HOME
 
 COPY ansible.cfg ${HOME}/ansible.cfg
+COPY inventory/hosts.example.yml ${HOME}/inventory/hosts.yml
 COPY requirements/requirements.yml ${HOME}/requirements.yml
 RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
  && chmod -R ug+rwx ${HOME}/.ansible
