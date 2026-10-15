@@ -118,6 +118,47 @@ This will keep container images on the system by default. To remove container im
     ```
     sudo systemctl restart goose-proxy
     ```
+## Dependency Management ##
+
+Konflux builds this image [hermetically](https://konflux-ci.dev/docs/building/hermetic-builds/)
+(with no network access in the container build). Every dependency is either
+pinned in the repository or prefetched by the
+[Hermeto](https://hermetoproject.github.io/hermeto/) `prefetch-dependencies`
+task, driven by the `prefetch-input`
+
+### Pip dependencies
+
+  ```
+  make pip-deps
+  ```
+
+`scripts/pip-deps.py` regenerates the backends file automatically:
+pybuild-deps reads the `[build-system]` section of every pinned sdist, so
+after adding or upgrading a dependency, no manual bookkeeping of build
+backends is needed.
+
+### Artifacts (galaxy collections)
+  
+  ```
+  make artifacts-lockfile
+  ```
+
+### RPMs lock
+
+  ```
+  make rpm-lock
+  ```
+
+### Testing locally
+
+    ```
+    make hermeto-prefetch
+    ```
+
+The prefetch can be validated locally with the same Hermeto image and input
+the pipeline uses (requires `podman`; output lands in `.hermeto-out/`):
+
 
 [`podman`]: https://podman.io/
+[pybuild-deps]: https://pypi.org/project/pybuild-deps/
 [rhokp_key]: https://access.redhat.com/offline/access/
