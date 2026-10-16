@@ -11,11 +11,8 @@
 - name: Copy config files
   template:
     src: "{{ item }}"
-    dest: "{{ ls_config_dir }}/{{ item }}"
-  loop:
-    - lightspeed-stack-{{ _ls_major_version }}.yml
-    - system_prompt.txt
-    - run.yml
+    dest: "{{ ls_config_dir }}/{{ item | basename | replace('-' ~ _ls_major_version, '')}}"
+  loop: "{{ ls_config_files }}"
   notify: init
   tags:
     - ls
