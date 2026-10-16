@@ -94,8 +94,8 @@ storage:
       backend: kv_default
 
 models:
-  - model_id: {{ ls_providers.ollama.model_id }}
-    provider_model_id: {{ ls_providers.ollama.provider_model_id }}
+  - model_id: {{ ls_providers.ramalama.model_id }}
+    provider_model_id: {{ ls_providers.ramalama.provider_model_id }}
     provider_id: ramalama
     model_type: llm
     metadata: {}
