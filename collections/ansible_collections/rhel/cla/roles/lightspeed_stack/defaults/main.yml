@@ -23,7 +23,7 @@ ls_providers:
     project_id: ~
     location: global
 
-  ollama:
+  ramalama:
     model_id: /models/granite-4.1-8b-Q4_1.gguf
     provider_model_id: /models/granite-4.1-8b-Q4_1.gguf
 
