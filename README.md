@@ -9,13 +9,30 @@ This is the installer for the self-managed RHEL CLA. It supports local, remote i
 - `tar`
 - A [Red Hat Offline Knowledge Portal key][rhokp_key]
 - 30GB of free disk space for the Red Hat Offline Knowledge Portal.
-- Valid login credentials in `/etc/containers/auth.json`.
+- Valid container registry login credentials in `/etc/containers/auth.json`.
+- If using a provider that requires a credentials stored in a file, create the secret in `podman`.
 
-Create the required login credentials. This needs to be done on both local and remote systems, or the auth file can be generated once and copied to remote systems.
+Create the container registry required login credentials. This needs to be done on both local and remote systems, or the auth file can be generated once and copied to remote systems.
 
 ```
 sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
 ```
+
+If necessary for your inference provider, create a `podman` secret.
+
+```
+sudo podman secrete create [secret name] [path to file]
+```
+
+Set the secret name in the inventory variables for our provider.
+```yaml
+ls_providers:
+  vertex:
+    project_id: my_project
+    location: global
+    credentials_secret_name: vertex
+```
+
 
 ## Local Installation ##
 
