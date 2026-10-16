@@ -16,13 +16,6 @@ ls_config:
   default_model: ~
   default_provider: ~
   deployment_environment: local
-  # quota_handlers:
-  #   postgres:
-  #     host: postgresql
-  #     port: 5432
-  #     db: lightspeed-stack
-  #     user: ~
-  #     password: ~
 
 ls_providers:
   vertex:
