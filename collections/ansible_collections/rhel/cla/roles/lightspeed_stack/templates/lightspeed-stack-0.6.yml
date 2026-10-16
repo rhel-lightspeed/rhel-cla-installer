@@ -6,8 +6,8 @@ for example configs
 name: lightspeed-stack
 
 service:
-  host: localhost
-  port: {{ ls_config.port }}
+  host: "{{ ls_host }}"
+  port: {{ ls_port }}
   root_path: /api/lightspeed
   auth_enabled: {{ ls_config.auth_enabled }}
   workers: {{ ls_config.workers }}
