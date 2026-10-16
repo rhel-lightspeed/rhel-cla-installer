@@ -6,10 +6,15 @@ Description=Lightspeed Stack
 Image={{ ls_name }}.image
 ContainerName={{ ls_name }}
 Pod={{ cla_pod_name }}.pod
+Exec=--config /app-root/lightspeed-stack.yml
+{% if ls_provider == "vertex" %}
+Secret={{ ls_providers.vertex.credentials_secret_name }},target=/run/secrets/{{ ls_providers.vertex.credentials_secret_name }},mode=400
+Environment=GOOGLE_APPLICATION_CREDENTIALS=/run/secrets/{{ ls_providers.vertex.credentials_secret_name }}
+{% endif %}
 
-Volume={{ ls_config_dir }}/lightspeed-stack-{{ _ls_major_version }}.yml:/app-root/lightspeed-stack.yaml:Z
-Volume={{ ls_config_dir }}/run.yml:/app-root/run.yaml:Z
-Volume={{ ls_config_dir }}/system_prompt.txt:/app-root/system_prompt.txt:Z
+{% for file in ls_config_files %}
+Volume={{ ls_config_dir }}/{{ file | basename | replace('-' ~ _ls_major_version, '') }}:/app-root/{{ file | basename |replace('-' ~ _ls_major_version, '') }}:Z,ro
+{% endfor %}
 
 [Service]
 Restart=on-failure
