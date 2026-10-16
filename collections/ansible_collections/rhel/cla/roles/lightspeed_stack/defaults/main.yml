@@ -8,10 +8,11 @@ ls_config_files:
   - system_prompt.txt
   - providers/{{ ls_provider }}/llama-stack.yml
 
+ls_host: "0.0.0.0"
+ls_port: 8081
 ls_config:
   auth_enabled: no
   workers: 1
-  port: 8080
   default_model: ~
   default_provider: ~
   deployment_environment: local
