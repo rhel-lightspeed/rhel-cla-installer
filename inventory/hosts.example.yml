@@ -4,4 +4,6 @@ all:
   vars:
     okp_access_key: ~
     okp_name: rh-offline-knowledge-portal
-    okp_solr_port: 8983
+    okp_port: 8983
+    cla_port: 8080
+    ls_port: 8081
