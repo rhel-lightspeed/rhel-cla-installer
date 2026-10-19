@@ -33,17 +33,6 @@ sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
     podman run --rm -i --entrypoint sh "$IMAGE" -c 'tar -cf - ansible.cfg rhel-cla-installer inventory' | tar -xf -
     ```
 
-1. Configure inventory.
-
-    Make a copy of the example inventory file and fill in the required variables.
-
-    ```
-    mkdir local/inventory
-    cp inventory/hosts.example.yml local/inventory/hosts.yml
-    ```
-
-    For local installation, no host definitions are necessary.
-
 1. Run the installer.
 
     ```
