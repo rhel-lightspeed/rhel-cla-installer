@@ -2,20 +2,19 @@ ls_name: lightspeed-stack
 ls_container_image: registry.redhat.io/lightspeed-core/lightspeed-stack-rhel9
 ls_container_image_tag: 0.6.4
 ls_config_dir: /var/lib/containers/lightspeed-stack
-ls_provider: vertex
 ls_config_files:
   - lightspeed-stack-{{ _ls_major_version }}.yml
   - system_prompt.txt
   - providers/{{ ls_provider }}/llama-stack.yml
 
-ls_host: "0.0.0.0"
+ls_host: 0.0.0.0
 ls_port: 8081
-ls_config:
-  auth_enabled: no
-  workers: 1
-  default_model: ~
-  default_provider: ~
-  deployment_environment: local
+ls_auth_enabled: no
+ls_workers: 1
+ls_deployment_environment: local
+
+ls_provider: ~
+ls_default_model: ~
 
 ls_providers:
   vertex:

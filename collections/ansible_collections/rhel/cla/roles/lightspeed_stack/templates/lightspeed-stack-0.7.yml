@@ -28,8 +28,8 @@ conversation_cache:
   type: noop
 
 inference:
-  default_model: {{ ls_config.default_model }}
-  default_provider: {{ ls_config.default_provider }}
+  default_provider: {{ ls_provider }}
+  default_model: {{ ls_default_model }}
 
 customization:
   system_prompt_path: /app-root/system_prompt.txt
@@ -41,7 +41,7 @@ mcp_servers:
     provider_id: model-context-protocol
     url: http://okp-mcp:8000/mcp
 
-# deployment_environment: {{ ls_config.deployment_environment }}
+# deployment_environment: {{ ls_deployment_environment }}
 
 splunk:
   enabled: false
@@ -50,7 +50,7 @@ user_data_collection:
   feedback_enabled: false
   transcripts_enabled: false
 
-# quota_handlers: {{ ls_config.quota_handlers }}
+# quota_handlers: {{ ls_quota_handlers }}
 
 ogx:
   use_as_library_client: true
@@ -70,11 +70,11 @@ ogx:
         - vector_io
 
       models:
-        - model_id: {{ ls_config.default_provider }}
+        - model_id: {{ ls_provider }}
           model_type: llm
           provider_id: vertex-model-garden
           metadata: {}
-          provider_model_id: {{ ls_config.default_provider }}
+          provider_model_id: {{ ls_provider }}
 
       providers:
         files:
