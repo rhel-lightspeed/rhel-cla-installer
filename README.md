@@ -33,10 +33,11 @@ sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
     podman run --rm -i --entrypoint sh "$IMAGE" -c 'tar -cf - ansible.cfg rhel-cla-installer inventory' | tar -xf -
     ```
 
+1. Update the variables in `inventory.hosts.yml`, such as `okp_access_key`. Some variables depend on the external provider.
+
 1. Run the installer.
 
     ```
-    cd local
     ./rhel-cla-installer rhel.cla.local
     ```
 
