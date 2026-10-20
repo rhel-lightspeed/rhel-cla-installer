@@ -94,50 +94,44 @@ storage:
       backend: kv_default
 
 models:
-  - model_id: publishers/google/models/gemini-2.5-flash
+  - model_id: gemini-2.5-flash-lite
+    provider_model_id: publishers/google/models/gemini-2.5-flash-lite
+    provider_id: vertex
+    model_type: llm
+    metadata: {}
+
+  - model_id: gemini-2.5-flash
     provider_model_id: publishers/google/models/gemini-2.5-flash
     provider_id: vertex
     model_type: llm
     metadata: {}
 
-  - model_id: publishers/google/models/gemini-3.5-flash
-    provider_model_id: publishers/google/models/gemini-3.5-flash
-    provider_id: vertex
-    model_type: llm
-    metadata: {}
-
-  - model_id: publishers/google/models/gemini-3-flash
-    provider_model_id: publishers/google/models/gemini-3-flash
-    provider_id: vertex
-    model_type: llm
-    metadata: {}
-
-  - model_id: publishers/google/models/gemini-3.1-pro
-    provider_model_id: publishers/google/models/gemini-3.1-pro
-    provider_id: vertex
-    model_type: llm
-    metadata: {}
-
-  - model_id: publishers/google/models/gemini-3.1-pro-preview
-    provider_model_id: publishers/google/models/gemini-3.1-pro-preview
-    provider_id: vertex
-    model_type: llm
-    metadata: {}
-
-  - model_id: publishers/google/models/gemini-3-1-flash-lite
-    provider_model_id: publishers/google/models/gemini-3-1-flash-lite
-    provider_id: vertex
-    model_type: llm
-    metadata: {}
-
-  - model_id: publishers/google/models/gemini-2.5-pro
+  - model_id: gemini-2.5-pro
     provider_model_id: publishers/google/models/gemini-2.5-pro
     provider_id: vertex
     model_type: llm
     metadata: {}
 
-  - model_id: publishers/google/models/gemini-2.5-flash-lite
-    provider_model_id: publishers/google/models/gemini-2.5-flash-lite
+  - model_id: gemini-3-flash
+    provider_model_id: publishers/google/models/gemini-3-flash
+    provider_id: vertex
+    model_type: llm
+    metadata: {}
+
+  - model_id: gemini-3-1-flash-lite
+    provider_model_id: publishers/google/models/gemini-3-1-flash-lite
+    provider_id: vertex
+    model_type: llm
+    metadata: {}
+
+  - model_id: gemini-3.1-pro
+    provider_model_id: publishers/google/models/gemini-3.1-pro
+    provider_id: vertex
+    model_type: llm
+    metadata: {}
+
+  - model_id: gemini-3.5-flash
+    provider_model_id: publishers/google/models/gemini-3.5-flash
     provider_id: vertex
     model_type: llm
     metadata: {}
