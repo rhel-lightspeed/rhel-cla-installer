@@ -106,11 +106,6 @@ This will keep container images on the system by default. To remove container im
 
 #### Goose (goose-redhat)
 
-1. Install `goose-redhat` on the RHEL system.
-
-    ```
-    sudo dnf install goose-redhat
-    ```
 
 1. Add the following to the `[backend]` section of `/etc/xdg/goose-proxy/config.toml`:
 
