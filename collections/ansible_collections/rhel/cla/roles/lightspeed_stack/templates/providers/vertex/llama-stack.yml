@@ -16,7 +16,7 @@ apis:
 
 providers:
   inference:
-    - provider_id: google-vertex
+    - provider_id: vertex
       provider_type: remote::vertexai
       config:
         project: {{ ls_providers.vertex.project_id }}
@@ -96,49 +96,49 @@ storage:
 models:
   - model_id: publishers/google/models/gemini-2.5-flash
     provider_model_id: publishers/google/models/gemini-2.5-flash
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-3.5-flash
     provider_model_id: publishers/google/models/gemini-3.5-flash
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-3-flash
     provider_model_id: publishers/google/models/gemini-3-flash
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-3.1-pro
     provider_model_id: publishers/google/models/gemini-3.1-pro
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-3.1-pro-preview
     provider_model_id: publishers/google/models/gemini-3.1-pro-preview
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-3-1-flash-lite
     provider_model_id: publishers/google/models/gemini-3-1-flash-lite
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-2.5-pro
     provider_model_id: publishers/google/models/gemini-2.5-pro
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
   - model_id: publishers/google/models/gemini-2.5-flash-lite
     provider_model_id: publishers/google/models/gemini-2.5-flash-lite
-    provider_id: google-vertex
+    provider_id: vertex
     model_type: llm
     metadata: {}
 
