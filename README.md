@@ -94,7 +94,7 @@ curl http://localhost:8080/api/lightspeed/liveness
 
 ### Uninstall ###
 
-Run `./rhel-cla-installer rhel.cla.local_uninstall`.
+Run `./rhel-cla-installer rhel.cla.local_uninstall`
 
 This will keep container images on the system by default. To remove container images, set `remove_images=yes`
 
