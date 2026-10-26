@@ -24,8 +24,8 @@ ls_providers:
 
   ramalama:
     base_url: http://127.0.0.1:8000/v1
-    model_id: /models/granite-4.1-8b-Q4_1.gguf
-    provider_model_id: /models/granite-4.1-8b-Q4_1.gguf
+    model_id: granite-4.1-8b-Q4_1
+    model_path: /models/granite-4.1-8b-Q4_1.gguf
 
   openai: {}
   rhoai: {}
