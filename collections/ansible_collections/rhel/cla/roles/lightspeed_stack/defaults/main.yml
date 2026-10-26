@@ -23,6 +23,7 @@ ls_providers:
     location: global
 
   ramalama:
+    api_key: sk-no-key-required
     base_url: http://127.0.0.1:8000/v1
     model_id: granite-4.1-8b-Q4_1
     model_path: /models/granite-4.1-8b-Q4_1.gguf

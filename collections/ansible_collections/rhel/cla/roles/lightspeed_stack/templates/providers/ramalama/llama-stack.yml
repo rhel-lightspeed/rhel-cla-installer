@@ -19,7 +19,7 @@ providers:
     - provider_id: ramalama
       provider_type: remote::openai
       config:
-        api_key: "sk-no-key-required"
+        api_key: {{ ls_providers.ramalama.api_key }}
         base_url: {{ ls_providers.ramalama.base_url }}
 
   agents:
