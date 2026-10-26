@@ -20,7 +20,7 @@ providers:
       provider_type: remote::openai
       config:
         api_key: "sk-no-key-required"
-        base_url: http://127.0.0.1:8000/v1
+        base_url: {{ ls_providers.ramalama.base_url }}
 
   agents:
     - provider_id: meta-reference
