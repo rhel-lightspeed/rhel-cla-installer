@@ -109,7 +109,11 @@ This will keep container images on the system by default. To remove container im
 ./rhel-cla-installer rhel.cla.local_uninstall -e remove_images=yes
 ```
 
-### Client Configurations ###
+### Upgrade ###
+
+See the [upgrading] documentation for details on how to upgrade.
+
+## Client Configurations ##
 
 #### Goose (goose-redhat)
 
@@ -129,3 +133,4 @@ This will keep container images on the system by default. To remove container im
 [`podman`]: https://podman.io/
 [rhokp_key]: https://access.redhat.com/offline/access/
 [contributing]: docs/contributing.md
+[upgrading]: docs/upgrading.md
