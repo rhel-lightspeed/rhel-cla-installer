@@ -16,7 +16,7 @@ See the [contributing] docs for information on project development and maintenan
 - A [Red Hat Offline Knowledge Portal key][rhokp_key]
 - 30GB of free disk space for the Red Hat Offline Knowledge Portal.
 - Valid container registry login credentials in `/etc/containers/auth.json`.
-- If using a provider that requires a credentials stored in a file, create the secret in `podman`.
+- If using a provider that requires credentials stored in a file, create the secret in `podman`.
 - `sudo` permissions on all systems where RHEL CLA will be installed. This includes when installing locally.
 
 Create the container registry login credentials. This needs to be done on both local and remote systems, or the auth file can be generated once and copied to remote systems.
@@ -28,7 +28,7 @@ sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
 If necessary for your inference provider, create a `podman` secret.
 
 ```
-sudo podman secrete create [secret name] [path to file]
+sudo podman secret create [secret name] [path to file]
 ```
 
 Set the secret name in the inventory variables for our provider.
