@@ -42,7 +42,7 @@ installWeakDeps: false
 # builder image does not actually provide and the hermetic toolchain
 # install then fails to resolve dependencies.
 context:
-  image: registry.access.redhat.com/hi/python:3.12-builder
+  image: registry.access.redhat.com/hi/python:3.12-builder@sha256:617b920efed6bc406cb510550dcfb9fa6821fc0748c082b16380cf4a2d9dd991
 
 arches:
   # Must match the build-platforms configured in .tekton/pipeline-build-multiarch.yaml.
