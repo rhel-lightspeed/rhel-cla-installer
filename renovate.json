@@ -5,10 +5,28 @@
       "/Containerfile/"
     ]
   },
+  "customManagers": [
+    {
+      "customType": "regex",
+      "description": "Keep the rpm-lockfile-prototype context image in sync with the Containerfile builder image",
+      "managerFilePatterns": [
+        "/^\\.konflux/rpms/rpms\\.in\\.yaml$/"
+      ],
+      "matchStrings": [
+        "image:\\s*(?<depName>[^:@\\s]+):(?<currentValue>[^@\\s]+)@(?<currentDigest>sha256:[a-f0-9]+)"
+      ],
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "redhat"
+    }
+  ],
   "packageRules": [
     {
       "matchManagers": ["dockerfile"],
       "versioning": "redhat"
+    },
+    {
+      "matchDepNames": ["registry.access.redhat.com/hi/python"],
+      "groupName": "python builder image"
     }
   ]
 }
