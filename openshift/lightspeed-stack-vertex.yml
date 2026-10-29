@@ -44,12 +44,15 @@ objects:
           - files
           - tool_runtime
 
+        server:
+          port: 8321
+
         providers:
           inference:
             - provider_id: google-vertex
               provider_type: remote::vertexai
               config:
-                project: ${env.VERTEXAI_PROJECT_ID}
+                project: ${env.VERTEX_AI_PROJECT_ID}
                 location: ${env.VERTEX_AI_LOCATION}
 
           agents:
@@ -135,29 +138,16 @@ objects:
               namespace: prompts
               backend: kv_default
 
-        # llama-stack 0.6.x rewrote the Vertex AI provider (remote::vertexai) to use
-        # the google-genai SDK directly. Model names must match the SDK-native format
-        # exactly for model registration to succeed. For Vertex AI, the SDK returns
-        # the full resource-name format (e.g., "publishers/google/models/gemini-2.5-flash").
-        # See: https://github.com/meta-llama/llama-stack/pull/5169
-        # The registered models mirror the Gemini LLMs in the org's
-        # vertexai.allowedModels policy (RSPEED-3221). The default is
-        # gemini-3.5-flash. NOTE: plain gemini-2.5-flash is NOT in the allow
-        # list, so inference against it is rejected by org policy; it is kept
-        # registered for now and should be removed once nothing references it.
+        # Model names must match the Goode SDK-native format exactly for model
+        # registration to succeed. For Vertex AI, the SDK returns the full
+        # resource-name format (e.g., "publishers/google/models/gemini-2.5-flash").
+        #
+        # See https://github.com/ogx-ai/ogx/pull/5169
         models:
-          - metadata: {}
-            model_id: publishers/google/models/gemini-2.5-flash
-            provider_id: google-vertex
-            provider_model_id: publishers/google/models/gemini-2.5-flash
-            model_type: llm
-
-          # gemini-2.5-flash discontinues June 17, 2026; gemini-3-flash is the
-          # planned successor (RSPEED-2796).
           - metadata: {}
             model_id: publishers/google/models/gemini-3.5-flash
             provider_id: google-vertex
-            provider_model_id: publishers/google/models/gemini-3.5-flash
+            provider_model_id: publishers/google/models/gemini-2.5-flash
             model_type: llm
 
           - metadata: {}
@@ -184,20 +174,6 @@ objects:
             provider_model_id: publishers/google/models/gemini-3-1-flash-lite
             model_type: llm
 
-          - metadata: {}
-            model_id: publishers/google/models/gemini-2.5-pro
-            provider_id: google-vertex
-            provider_model_id: publishers/google/models/gemini-2.5-pro
-            model_type: llm
-
-          - metadata: {}
-            model_id: publishers/google/models/gemini-2.5-flash-lite
-            provider_id: google-vertex
-            provider_model_id: publishers/google/models/gemini-2.5-flash-lite
-            model_type: llm
-
-        server:
-          port: 8321
 
   # ---------- ConfigMap: lightspeed-stack.yaml (service config) ----------
   - kind: ConfigMap
@@ -265,9 +241,9 @@ objects:
           allow_verbose_infer: ${ALLOW_VERBOSE_INFER}
 
         mcp_servers:
-          - name: "okp"
+          - name: rhel-knowledge-bridge
             provider_id: "model-context-protocol"
-            url: "http://okp-mcp:8000/mcp"
+            url: "http://rhel-knowledge-bridge:8000/mcp"
 
         deployment_environment: "${DEPLOYMENT_ENVIRONMENT}"
         user_data_collection:
@@ -396,8 +372,8 @@ objects:
                   value: "${DEPLOYMENT_ENVIRONMENT}"
 
                 # ── Vertex AI ──
-                - name: VERTEXAI_PROJECT_ID
-                  value: "${VERTEXAI_PROJECT_ID}"
+                - name: VERTEX_AI_PROJECT_ID
+                  value: "${VERTEX_AI_PROJECT_ID}"
 
                 - name: VERTEX_AI_LOCATION
                   value: "${VERTEX_AI_LOCATION}"
@@ -525,7 +501,7 @@ parameters:
       Must be set explicitly per environment in saas.yml.
       Stage: Konflux-built digest, auto-bumped by component nudging.
       Prod: quay.io/lightspeed-core/lightspeed-stack:<tag>.
-    value: registry.redhat.io/lightspeed-core/lightspeed-stack-rhel9:0.6.4
+    value: registry.redhat.io/lightspeed-core/lightspeed-stack-rhel9:0.6.6
     required: true
 
   - name: REPLICAS
@@ -554,7 +530,7 @@ parameters:
     description: Memory limit per pod.
     value: 1Gi
 
-  - name: VERTEXAI_PROJECT_ID
+  - name: VERTEX_AI_PROJECT_ID
     displayName: Vertex AI Project
     description: GCP project ID for Vertex AI.
     required: true
