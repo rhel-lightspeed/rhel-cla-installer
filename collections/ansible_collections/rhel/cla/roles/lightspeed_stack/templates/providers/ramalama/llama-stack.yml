@@ -95,7 +95,7 @@ storage:
 
 models:
   - model_id: {{ _ls_provider_config.default_model }}
-    provider_model_id: {{ _ls_provider_config.model_path }}
+    provider_model_id: {{ _ls_provider_config.default_model }}
     provider_id: ramalama
     model_type: llm
     metadata: {}
