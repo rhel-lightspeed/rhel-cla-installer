@@ -17,7 +17,6 @@ See the [contributing] docs for information on project development and maintenan
 - A [Red Hat Offline Knowledge Portal key][rhokp_key]
 - 30GB of free disk space for the Red Hat Offline Knowledge Portal.
 - Valid container registry login credentials in `/etc/containers/auth.json`.
-- If using a provider that requires credentials stored in a file, create the secret in `podman`.
 - `sudo` permissions on all systems where RHEL CLA will be installed. This includes when installing locally.
 
 Create the container registry login credentials. This needs to be done on both local and remote systems, or the auth file can be generated once and copied to remote systems.
@@ -26,20 +25,7 @@ Create the container registry login credentials. This needs to be done on both l
 sudo podman login --authfile /etc/containers/auth.json registry.redhat.io
 ```
 
-If necessary for your inference provider, create a `podman` secret. See `inventory/hosts.example.yml` for details.
-
-```
-sudo podman secret create [secret name] [path to file]
-```
-
-Set the secret name in the inventory variables for our provider.
-```yaml
-vertex_config:
-  default_model: publishers/google/models/gemini-2.5-flash
-  credentials_secret_name: secret_name
-  project_id: my_project
-  location: global
-```
+See the [providers documentation] for provider specific configuration. The provider must be setup and available before running the installer.
 
 
 ## Local Installation ##
@@ -115,12 +101,13 @@ See the [upgrading] documentation for details on how to upgrade.
 
 ## Client Configurations ##
 
-#### Goose (goose-redhat)
+### Goose (goose-redhat) ###
 
 
-1. Add the following to the `[backend]` section of `/etc/xdg/goose-proxy/config.toml`:
+1. Add an endpoint to the `[backend]` section of `/etc/xdg/goose-proxy/config.toml` and update the timeout:
 
     ```toml
+    timeout = 300
     endpoint = "http://127.0.0.1:8080/v1"
     ```
 
@@ -134,3 +121,4 @@ See the [upgrading] documentation for details on how to upgrade.
 [rhokp_key]: https://access.redhat.com/offline/access/
 [contributing]: docs/contributing.md
 [upgrading]: docs/upgrading.md
+[providers documentation]: docs/providers.md
