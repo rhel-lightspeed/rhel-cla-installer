@@ -145,7 +145,7 @@ objects:
         # See https://github.com/ogx-ai/ogx/pull/5169
         models:
           - metadata: {}
-            model_id: publishers/google/models/gemini-3.5-flash
+            model_id: publishers/google/models/gemini-2.5-flash
             provider_id: google-vertex
             provider_model_id: publishers/google/models/gemini-2.5-flash
             model_type: llm
@@ -172,6 +172,12 @@ objects:
             model_id: publishers/google/models/gemini-3-1-flash-lite
             provider_id: google-vertex
             provider_model_id: publishers/google/models/gemini-3-1-flash-lite
+            model_type: llm
+
+          - metadata: {}
+            model_id: publishers/google/models/gemini-3.5-flash
+            provider_id: google-vertex
+            provider_model_id: publishers/google/models/gemini-3.5-flash
             model_type: llm
 
 
