@@ -555,7 +555,6 @@ parameters:
     displayName: Root Path
     description: URL path prefix for reverse proxy deployments.
     value: ""
-  # OBSERVABILITY: SPLUNK
 
   - name: SPLUNK_ENABLED
     displayName: Splunk Logging Enabled
@@ -567,12 +566,12 @@ parameters:
   - name: SPLUNK_URL
     displayName: Splunk HEC URL
     description: Splunk HTTP Event Collector endpoint URL.
-    value: "https://splunk-hec.redhat.com/services/collector/event"
+    value: ""
 
   - name: SPLUNK_INDEX
     displayName: Splunk Index
     description: Splunk index for telemetry events.
-    value: "rh_rhls-002"
+    value: ""
 
   - name: SPLUNK_SECRET_NAME
     displayName: Splunk Secret Name
