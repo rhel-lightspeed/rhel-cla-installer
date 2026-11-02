@@ -202,12 +202,8 @@ objects:
           library_client_config_path: /app-root/run.yaml
 
         authentication:
-          module: rh-identity
-          skip_for_health_probes: true
-          skip_for_metrics: true
-          rh_identity_config:
-            required_entitlements:
-              - rhel
+          module: api-key-token
+          api_key: "${API_KEY}"
 
         authorization:
           access_rules:
@@ -529,6 +525,12 @@ parameters:
     displayName: Memory Limit
     description: Memory limit per pod.
     value: 1Gi
+
+  - name: API_KEY
+    displayName: API key
+    description: API key used to access the API
+    generate: expression
+    from: '[a-zA-Z0-9]{64}'
 
   - name: VERTEX_AI_PROJECT_ID
     displayName: Vertex AI Project
