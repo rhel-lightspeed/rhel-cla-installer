@@ -10,7 +10,7 @@ metadata:
     openshift.io/display-name: RHEL Lightspeed Stack
 
 objects:
-  # ---------- ServiceAccount ----------
+  # ====== ServiceAccount ====== #
   - kind: ServiceAccount
     apiVersion: v1
     metadata:
@@ -19,7 +19,7 @@ objects:
         service: rhel-cla
         app: "${NAME}"
 
-  # ---------- ConfigMap: run.yaml (llama-stack library config) ----------
+  # ====== ConfigMap: run.yaml (llama-stack library config) ====== #
   - kind: ConfigMap
     apiVersion: v1
     metadata:
@@ -175,7 +175,7 @@ objects:
             model_type: llm
 
 
-  # ---------- ConfigMap: lightspeed-stack.yaml (service config) ----------
+  # ====== ConfigMap: lightspeed-stack.yaml (service config) ====== #
   - kind: ConfigMap
     apiVersion: v1
     metadata:
@@ -444,7 +444,7 @@ objects:
                   cpu: "${CPU_LIMIT}"
                   memory: "${MEMORY_LIMIT}"
 
-  # ---------- Service ----------
+  # ====== Service ====== #
   - kind: Service
     apiVersion: v1
     metadata:
@@ -462,7 +462,7 @@ objects:
       selector:
         app: "${NAME}"
 
-  # ---------- Route ----------
+  # ====== Route ====== #
   - kind: Route
     apiVersion: route.openshift.io/v1
     metadata:
