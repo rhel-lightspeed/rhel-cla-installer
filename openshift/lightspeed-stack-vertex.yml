@@ -16,7 +16,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
   # ---------- ConfigMap: run.yaml (llama-stack library config) ----------
@@ -28,7 +28,7 @@ objects:
         qontract.recycle: "true"
 
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     data:
@@ -184,7 +184,7 @@ objects:
         qontract.recycle: "true"
 
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     data:
@@ -275,7 +275,7 @@ objects:
         qontract.recycle: "true"
 
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     data:
@@ -287,7 +287,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:
@@ -302,7 +302,7 @@ objects:
             deployment-version: "${DEPLOYMENT_VERSION}"
 
           labels:
-            service: rhel-lightspeed
+            service: rhel-cla
             app: "${NAME}"
 
         spec:
@@ -454,7 +454,7 @@ objects:
     metadata:
       name: "${SERVICE_NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:
@@ -472,7 +472,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:

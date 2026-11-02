@@ -19,7 +19,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
   # ---------- Deployment ----------
@@ -28,7 +28,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:
@@ -43,7 +43,7 @@ objects:
       template:
         metadata:
           labels:
-            service: rhel-lightspeed
+            service: rhel-cla
             app: "${NAME}"
 
         spec:
@@ -97,7 +97,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:

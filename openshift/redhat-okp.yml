@@ -27,7 +27,7 @@ objects:
     metadata:
       name: "${NAME}-tar-wrapper"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     data:
@@ -43,7 +43,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
   # ---------- Deployment ----------
@@ -52,7 +52,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:
@@ -73,7 +73,7 @@ objects:
             configmap-hash: "tar-wrapper-v5"
 
           labels:
-            service: rhel-lightspeed
+            service: rhel-cla
             app: "${NAME}"
 
         spec:
@@ -149,7 +149,7 @@ objects:
     metadata:
       name: "${NAME}"
       labels:
-        service: rhel-lightspeed
+        service: rhel-cla
         app: "${NAME}"
 
     spec:
