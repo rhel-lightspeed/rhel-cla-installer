@@ -101,27 +101,24 @@ See the [upgrading] documentation for details on how to upgrade.
 
 # Deploy on OpenShift #
 
-Epic overview for the OpenShift / operator work. **Review the stacked PRs**, not this branch’s historical mega-diff:
+Work tracked under draft epic
+[#78](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/78).
+**Start with the design + ELI5** (commentable), then small follow-up PRs:
 
-| # | PR | What to review |
-| --- | --- | --- |
-| 1 | [#79](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/79) | k8s SoT — `templates/k8s` + `rhel.cla.k8s` |
-| 2 | [#80](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/80) | `operator/` scaffold + Containerfile build |
-| 3 | [#81](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/81) | `RhelCla` CRD + `rhelcla` reconcile |
-| 4 | [#82](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/82) | `rhel.cla.operator` one-shot (build\|release) |
+- Design: [`docs/design-openshift-operator.md`](docs/design-openshift-operator.md)
+- ELI5 operators: [`docs/eli5-ansible-operators.md`](docs/eli5-ansible-operators.md)
+- Lab notes: [`openshift-deployment/OC-Deployment.md`](openshift-deployment/OC-Deployment.md)
+- Manual TESTPLAN: [`openshift-deployment/TESTPLAN.md`](openshift-deployment/TESTPLAN.md)
 
-Architecture (reuse vs leave-alone): [`openshift-deployment/OC-Deployment.md`](openshift-deployment/OC-Deployment.md).  
-Lab steps: [`openshift-deployment/TESTPLAN.md`](openshift-deployment/TESTPLAN.md).
+Coarse stack PRs (#79–#82) were a first split; prefer **role-sized** PRs that
+link the design doc (see design §3). Legacy Templates under
+[`openshift/`](openshift/) stay reference-only.
+
+Path A (no operator required to learn the SoT):
 
 ```
-# After #79 lands:
 ./rhel-cla-installer rhel.cla.k8s -e @examples/openshift-lab-vars.yml
-
-# After #82 lands:
-./rhel-cla-installer rhel.cla.operator -e @examples/openshift-lab-vars.yml
 ```
-
-Legacy OpenShift Templates under [`openshift/`](openshift/) remain reference-only.
 
 # Client Configurations #
 
