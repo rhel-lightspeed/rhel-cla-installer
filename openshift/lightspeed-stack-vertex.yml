@@ -310,7 +310,7 @@ objects:
 
             - name: gcp-credentials
               secret:
-                secretName: vertexai
+                secretName: "${VERTEX_AI_SECRET_NAME}"
                 items:
                   - key: credentials_json
                     path: credentials.json
@@ -527,6 +527,12 @@ parameters:
     displayName: Vertex AI Location
     description: GCP region for Vertex AI.
     value: global
+    required: true
+
+  - name: VERTEX_AI_SECRET_NAME
+    displayName: Vertex AI secret name
+    description: Name of the secret containing Vertex credentials.
+    value: vertexai
     required: true
 
   - name: DEFAULT_MODEL
