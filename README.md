@@ -101,50 +101,27 @@ See the [upgrading] documentation for details on how to upgrade.
 
 # Deploy on OpenShift #
 
-Example [templates] for deploying on OpenShift are available. Copy `openshift/params.example` to `openshift/params` and provide values as appropriate.
+Epic overview for the OpenShift / operator work. **Review the stacked PRs**, not this branch’s historical mega-diff:
 
-### Database ###
+| # | PR | What to review |
+| --- | --- | --- |
+| 1 | [#79](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/79) | k8s SoT — `templates/k8s` + `rhel.cla.k8s` |
+| 2 | [#80](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/80) | `operator/` scaffold + Containerfile build |
+| 3 | [#81](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/81) | `RhelCla` CRD + `rhelcla` reconcile |
+| 4 | [#82](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/82) | `rhel.cla.operator` one-shot (build\|release) |
 
-A template is provided to create a PostgreSQL database if needed. An existing PostgreSQL database can be used. Provide connection details in a secret with the following keys:
-
-- `db.host`
-- `db.port`
-- `db.name`
-- `db.user`
-- `db.password`
-
-Set `POSTGRES_SECRET_NAME` to the secret name in `openshift/params`.
+Architecture (reuse vs leave-alone): [`openshift-deployment/OC-Deployment.md`](openshift-deployment/OC-Deployment.md).  
+Lab steps: [`openshift-deployment/TESTPLAN.md`](openshift-deployment/TESTPLAN.md).
 
 ```
-cd openshift
-oc process --param-file params --ignore-unknown-parameters -f postgresql.yml | oc apply -f -
+# After #79 lands:
+./rhel-cla-installer rhel.cla.k8s -e @examples/openshift-lab-vars.yml
+
+# After #82 lands:
+./rhel-cla-installer rhel.cla.operator -e @examples/openshift-lab-vars.yml
 ```
 
-### Authentication ###
-
-The template uses [token authentication] by default and will generate a new key by default. To retrieve it, run `oc get configmap lightspeed-stack-config -o jsonpath='{.data.lightspeed-stack\\.yaml}'` in the deployment namespace and find the `api_key` value under `authentication`.
-
-Set `API_KEY` to a value in `openshift/params` to choose your own key.
-
-To use the key, set the `Authorization: Bearer ${API_KEY}` header when interacting with the API directly, or set it in your LLM client.
-
-[JWK token authentication] may be appropriate in enterprise deployments.
-
-
-### Provider Secret ###
-
-Credentials used to authenticate to an inference provider must be configured as secrets and made available. For example, Vertex AI expects the service account JSON to be stored in a secret name `vertexai` in the `credentials_json` key. Override the secret name by setting `VERTEX_AI_SECRET_NAME`.
-
-### Deploy ###
-
-Once any customizations are made and the correct parameters are provided, process and apply the application templates. The PostgreSQL template is optional and should already be applied if necessary.
-
-```
-cd openshift
-for template in redhat-okp rhel-knowledge-bridge lightspeed-stack-vertex; do
-    oc process --param-file params --ignore-unknown-parameters -f "${template}.yml" | oc apply -f -
-done
-```
+Legacy OpenShift Templates under [`openshift/`](openshift/) remain reference-only.
 
 # Client Configurations #
 
@@ -169,6 +146,5 @@ done
 [contributing]: docs/contributing.md
 [upgrading]: docs/upgrading.md
 [providers documentation]: docs/providers.md
-[templates]: openshift/
 [token authentication]: https://github.com/lightspeed-core/lightspeed-stack/blob/main/docs/auth/api-key-token.md
 [JWK token authentication]: https://github.com/lightspeed-core/lightspeed-stack/blob/main/docs/auth/jwk-token.md
