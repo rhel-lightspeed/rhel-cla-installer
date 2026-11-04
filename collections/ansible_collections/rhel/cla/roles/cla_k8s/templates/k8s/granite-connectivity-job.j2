@@ -1,0 +1,65 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: granite-connectivity
+  namespace: {{ cla_namespace }}
+  labels:
+    app: granite-connectivity
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  backoffLimit: 2
+  ttlSecondsAfterFinished: 600
+  template:
+    metadata:
+      labels:
+        app: granite-connectivity
+        app.kubernetes.io/part-of: rhel-cla
+    spec:
+      restartPolicy: Never
+      containers:
+        - name: curl
+          image: {{ cla_granite_job_image }}
+          imagePullPolicy: IfNotPresent
+          command:
+            - /bin/sh
+            - -c
+            - |
+              set -eu
+              echo "GET http://{{ cla_granite_host }}:{{ cla_granite_port }}/v1/models"
+              curl -sf --connect-timeout 10 --max-time 30 \
+                http://{{ cla_granite_host }}:{{ cla_granite_port }}/v1/models | head -c 400
+              echo
+              echo "OK: in-cluster Granite connectivity succeeded"
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 200m
+              memory: 128Mi
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-granite-job
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector:
+    matchLabels:
+      app: granite-connectivity
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: {{ cla_granite_cidr }}
+      ports:
+        - protocol: TCP
+          port: {{ cla_granite_port }}
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53

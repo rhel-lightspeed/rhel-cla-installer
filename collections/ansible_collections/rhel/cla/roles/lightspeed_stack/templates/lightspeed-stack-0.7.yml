@@ -2,19 +2,29 @@
 name: lightspeed-stack
 
 service:
-  host: 0.0.0.0
+  host: "{{ ls_host }}"
   port: {{ ls_port }}
   root_path: /api/lightspeed
-  auth_enabled: true
-  workers: 1
+  auth_enabled: {{ (ls_auth_enabled | bool) | ternary('true', 'false') }}
+  workers: {{ ls_workers }}
 
+{% if ls_auth_enabled | bool %}
 authentication:
-  module: rh-identity
+  module: {{ ls_auth_module }}
   skip_for_health_probes: true
   skip_for_metrics: true
+{% if ls_auth_module == 'api-key-token' %}
+  api_key_config:
+    # LCORE replace_env_vars resolves ${env.*} from the process environment.
+    api_key: "${env.API_KEY}"
+{% elif ls_auth_module == 'rh-identity' %}
   rh_identity_config:
     required_entitlements:
-      - rhel
+{% for ent in ls_rh_identity_entitlements %}
+      - {{ ent }}
+{% endfor %}
+{% endif %}
+{% endif %}
 
 authorization:
   access_rules:
@@ -37,11 +47,11 @@ customization:
   disable_shield_ids_override: true
 
 mcp_servers:
-  - name: okp
+  - name: rhel-knowledge-bridge
     provider_id: model-context-protocol
-    url: http://okp-mcp:8000/mcp
+    url: http://{{ rkb_name }}:{{ rkb_port }}/mcp
 
-# deployment_environment: {{ ls_deployment_environment }}
+deployment_environment: {{ ls_deployment_environment }}
 
 splunk:
   enabled: false
