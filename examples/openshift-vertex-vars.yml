@@ -1,0 +1,37 @@
+---
+# Example extra vars for rhel.cla.k8s with Vertex AI + in-cluster Postgres (PR8-shaped).
+# Usage:
+#   ./rhel-cla-installer rhel.cla.k8s -e @examples/openshift-vertex-vars.yml
+# Create the Vertex credentials Secret before apply, e.g.:
+#   oc -n rhel-cla-system create secret generic vertexai \
+#     --from-file=credentials.json=/path/to/sa.json
+
+cla_namespace: rhel-cla-system
+cla_create_namespace: true
+cla_network_policies: true
+cla_resource_quota: true
+cla_granite_connectivity_job: false
+cla_pull_secret_name: redhat-pull-secret
+
+okp_state: present
+okp_use_pvc: true
+
+rkb_state: present
+
+ls_state: present
+ls_create_route: true
+ls_deployment_environment: openshift
+ls_auth_enabled: true
+ls_auth_module: api-key-token
+ls_manage_api_key_secret: true
+ls_use_postgres: true
+ls_postgres_name: rhel-cla-db
+ls_postgres_secret_name: rhel-cla-db
+
+rhel_cla_provider: vertex
+vertex_config:
+  default_model: gemini-2.5-flash
+  credentials_secret_name: vertexai
+  credentials_secret_key: credentials.json
+  project_id: REPLACE_ME
+  location: global

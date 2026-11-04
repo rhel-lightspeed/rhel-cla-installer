@@ -1,0 +1,32 @@
+---
+# Thin reconcile: map RhelCla CR → same vars as inventory/-e, then the
+# identical import_role / tasks_from: k8s chain as playbooks/k8s.yml.
+- name: Default target namespace from CR metadata when unset
+  ansible.builtin.set_fact:
+    cla_namespace: "{{ cla_namespace | default(ansible_operator_meta.namespace, true) }}"
+
+- name: Shared namespace / NetPol / quota / optional Granite Job
+  ansible.builtin.import_role:
+    name: rhel.cla.cla_k8s
+    tasks_from: k8s
+
+- name: Offline Knowledge Portal
+  ansible.builtin.import_role:
+    name: rhel.cla.okp
+    tasks_from: k8s
+
+- name: RHEL Knowledge Bridge
+  ansible.builtin.import_role:
+    name: rhel.cla.rhel_knowledge_bridge
+    tasks_from: k8s
+
+- name: Optional PostgreSQL for Lightspeed
+  ansible.builtin.import_role:
+    name: rhel.cla.postgresql
+    tasks_from: k8s
+  when: ls_use_postgres | default(false) | bool
+
+- name: Lightspeed Stack
+  ansible.builtin.import_role:
+    name: rhel.cla.lightspeed_stack
+    tasks_from: k8s

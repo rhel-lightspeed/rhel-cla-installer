@@ -1,0 +1,4 @@
+## Append samples of your project ##
+resources:
+- cla_v1alpha1_rhelcla.yaml
+# +kubebuilder:scaffold:manifestskustomizesamples

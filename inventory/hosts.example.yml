@@ -10,8 +10,9 @@ all:
     ## The configuration used is based on the value of rhel_cla_provider: [rhel_cla_provider]_config.
     #
     # vertex_config:
-    #   default_model: gemini-2.5-pro
-    #   credentials_secret_name: ~
+    #   default_model: gemini-2.5-flash
+    #   credentials_secret_name: vertexai
+    #   credentials_secret_key: credentials.json
     #   project_id: ~
     #   location: global
     #
@@ -19,3 +20,16 @@ all:
     #   default_model: granite-4.1-8b-Q4_1
     #   api_key: sk-no-key-required
     #   base_url: http://127.0.0.1:8000/v1
+    #   model_path: /models/granite-4.1-8b-Q4_1.gguf
+
+    ## OpenShift / rhel.cla.k8s (also pass via -e @examples/openshift-*.yml)
+    # cla_namespace: rhel-cla-system
+    # ls_deployment_environment: openshift
+    # ls_auth_enabled: true
+    # ls_auth_module: api-key-token   # or rh-identity, jwk-token, …
+    # ls_use_postgres: false
+
+    ## rhel.cla.operator image source
+    # operator_image_mode: build      # default: podman build + push to cluster registry
+    # operator_image_mode: release
+    # operator_image: quay.io/example/rhel-cla-operator:1.2.3

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ pg_name }}
+{% if cla_namespace | default('') %}
+  namespace: {{ cla_namespace }}
+{% endif %}
+  labels:
+    service: rhel-cla
+    app: {{ pg_name }}
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  replicas: {{ pg_replicas }}
+  selector:
+    matchLabels:
+      app: {{ pg_name }}
+  template:
+    metadata:
+      labels:
+        service: rhel-cla
+        app: {{ pg_name }}
+        app.kubernetes.io/part-of: rhel-cla
+    spec:
+      containers:
+        - name: postgres
+          image: {{ pg_image }}
+          ports:
+            - name: postgres
+              containerPort: 5432
+              protocol: TCP
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: {{ pg_name }}
+                  key: db.name
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ pg_name }}
+                  key: db.user
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ pg_name }}
+                  key: db.password
+          volumeMounts:
+            - name: pg-data
+              mountPath: /var/lib/postgresql
+          readinessProbe:
+            exec:
+              command: ["pg_isready", "-U", "{{ pg_db_user }}", "-d", "{{ pg_db_name }}"]
+            initialDelaySeconds: 5
+            periodSeconds: 10
+      volumes:
+        - name: pg-data
+          emptyDir: {}
