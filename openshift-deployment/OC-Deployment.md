@@ -1,5 +1,8 @@
 # RHEL CLA on OpenShift — Ansible notes
 
+**Design (commentable):** [`../docs/design-openshift-operator.md`](../docs/design-openshift-operator.md)  
+**ELI5 operators:** [`../docs/eli5-ansible-operators.md`](../docs/eli5-ansible-operators.md)
+
 OpenShift deploy uses the **same collection interface** as local install:
 Jinja templates in each role’s `templates/k8s/`, applied by the
 `rhel.cla.k8s` playbook. Do not maintain a parallel static manifest tree.
