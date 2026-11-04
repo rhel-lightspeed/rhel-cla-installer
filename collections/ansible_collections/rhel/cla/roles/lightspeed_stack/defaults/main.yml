@@ -1,6 +1,8 @@
 ls_name: lightspeed-stack
 ls_container_image: registry.redhat.io/lightspeed-core/lightspeed-stack-rhel9
 ls_container_image_tag: 0.6.4
+ls_container_image_digest: ""
+
 ls_config_dir: /var/lib/containers/lightspeed-stack
 ls_config_files:
   - lightspeed-stack-{{ _ls_major_version }}.yml
@@ -9,22 +11,55 @@ ls_config_files:
 
 ls_host: 0.0.0.0
 ls_port: 8081
+ls_service_port: 8080
+# Local Quadlet default: auth off. OCP examples enable api-key-token (PR8).
 ls_auth_enabled: no
+# Lightspeed Stack modules: noop | api-key-token | jwk-token | rh-identity | kubernetes
+ls_auth_module: api-key-token
+ls_api_key: ""
+ls_api_key_secret_name: lightspeed-stack-api-key
+ls_api_key_secret_key: API_KEY
+# When true (k8s), create/update the API key Secret if ls_api_key is set or generate one
+ls_manage_api_key_secret: true
+ls_rh_identity_entitlements:
+  - rhel
 ls_workers: 1
 ls_deployment_environment: local
+ls_replicas: 1
+ls_cpu_request: 500m
+ls_cpu_limit: "2"
+ls_memory_request: 1Gi
+ls_memory_limit: 4Gi
+
+ls_state: present
+cla_namespace: ""
+cla_pull_secret_name: ""
+
+# Create an OpenShift Route for the Lightspeed service
+ls_create_route: true
+# Router idle/timeout for long lab-Granite responses (non-streaming)
+ls_route_timeout: 7200s
+
+# Optional in-cluster PostgreSQL (PR8). When true, llama-stack + quota use Postgres.
+ls_use_postgres: false
+ls_postgres_secret_name: rhel-cla-db
+ls_postgres_name: rhel-cla-db
 
 rhel_cla_provider: ~
 
 vertex_config:
-  default_model: publishers/google/models/gemini-2.5-flash
-  credentials_secret_name: ~
+  # Prefer short model ids registered in providers/vertex/llama-stack.yml
+  default_model: gemini-2.5-flash
+  credentials_secret_name: vertexai
+  credentials_secret_key: credentials.json
   project_id: ~
   location: global
 
 ramalama_config:
   default_model: granite-4.1-8b-Q4_1
   api_key: sk-no-key-required
-  base_url: http://host.containers.internal:9010/v1
+  base_url: http://127.0.0.1:8000/v1
+  model_path: /models/granite-4.1-8b-Q4_1.gguf
 
 openai_config: {}
 rhoai_config: {}

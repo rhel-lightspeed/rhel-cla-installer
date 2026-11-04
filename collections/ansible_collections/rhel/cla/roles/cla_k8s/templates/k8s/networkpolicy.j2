@@ -1,0 +1,162 @@
+# Default deny, then allow DNS, in-namespace CLA traffic, router ingress to
+# Lightspeed, kubelet probes, and egress to lab Granite.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-all
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-dns
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector: {}
+  policyTypes:
+    - Egress
+  egress:
+    # Cluster DNS (CoreDNS / OpenShift DNS)
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              kubernetes.io/metadata.name: openshift-dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 5353
+    - to:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: dns
+      ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+        - protocol: UDP
+          port: 5353
+    # Also allow :53 to any (covers kube-dns ClusterIP)
+    - ports:
+        - protocol: UDP
+          port: 53
+        - protocol: TCP
+          port: 53
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-same-namespace
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+    - Egress
+  ingress:
+    - from:
+        - podSelector: {}
+  egress:
+    - to:
+        - podSelector: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-router-to-lightspeed
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector:
+    matchLabels:
+      app: lightspeed-stack
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - namespaceSelector:
+            matchLabels:
+              network.openshift.io/policy-group: ingress
+      ports:
+        - protocol: TCP
+          port: 8081
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-egress-lab-granite
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector:
+    matchLabels:
+      app: lightspeed-stack
+  policyTypes:
+    - Egress
+  egress:
+    - to:
+        - ipBlock:
+            cidr: {{ cla_granite_cidr }}
+      ports:
+        - protocol: TCP
+          port: {{ cla_granite_port }}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-kubelet-probes-lightspeed
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector:
+    matchLabels:
+      app: lightspeed-stack
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8081
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-kubelet-probes-okp-rkb
+  namespace: {{ cla_namespace }}
+  labels:
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  podSelector:
+    matchExpressions:
+      - key: app
+        operator: In
+        values:
+          - rh-offline-knowledge-portal
+          - rhel-knowledge-bridge
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8983
+        - protocol: TCP
+          port: 8192
+        - protocol: TCP
+          port: 8080

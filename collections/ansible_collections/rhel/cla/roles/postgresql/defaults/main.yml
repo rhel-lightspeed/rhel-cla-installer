@@ -1,0 +1,11 @@
+# Optional in-cluster PostgreSQL for Lightspeed / llama-stack (PR8 parity).
+pg_name: "{{ ls_postgres_name | default('rhel-cla-db') }}"
+pg_state: present
+pg_image: docker.io/library/postgres:18-alpine
+pg_replicas: 1
+# Empty = generate a random password when creating the Secret
+pg_password: ""
+pg_db_name: lightspeed
+pg_db_user: app
+
+cla_namespace: ""

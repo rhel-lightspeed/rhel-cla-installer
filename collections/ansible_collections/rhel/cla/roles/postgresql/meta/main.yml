@@ -1,0 +1,8 @@
+---
+galaxy_info:
+  role_name: postgresql
+  author: rhel-lightspeed
+  description: Optional PostgreSQL for RHEL CLA Lightspeed on Kubernetes/OpenShift
+  license: Apache-2.0
+  min_ansible_version: "2.15"
+dependencies: []

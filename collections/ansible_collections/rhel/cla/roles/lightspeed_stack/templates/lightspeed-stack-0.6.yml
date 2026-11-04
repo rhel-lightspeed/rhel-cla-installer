@@ -9,14 +9,33 @@ service:
   host: "{{ ls_host }}"
   port: {{ ls_port }}
   root_path: /api/lightspeed
-  auth_enabled: {{ ls_auth_enabled }}
+  auth_enabled: {{ (ls_auth_enabled | bool) | ternary('true', 'false') }}
   workers: {{ ls_workers }}
+
+{% if ls_auth_enabled | bool %}
+authentication:
+  module: {{ ls_auth_module }}
+  skip_for_health_probes: true
+  skip_for_metrics: true
+{% if ls_auth_module == 'api-key-token' %}
+  api_key_config:
+    # LCORE replace_env_vars resolves ${env.*} from the process environment.
+    api_key: "${env.API_KEY}"
+{% elif ls_auth_module == 'rh-identity' %}
+  rh_identity_config:
+    required_entitlements:
+{% for ent in ls_rh_identity_entitlements %}
+      - {{ ent }}
+{% endfor %}
+{% endif %}
+{% endif %}
 
 authorization:
   access_rules:
     - role: "*"
       actions:
         - rlsapi_v1_infer
+        - responses
         - get_metrics
         - info
 
@@ -45,6 +64,16 @@ splunk:
 user_data_collection:
   feedback_enabled: false
   transcripts_enabled: false
+
+{% if ls_use_postgres | bool %}
+quota_handlers:
+  postgres:
+    host: ${env.POSTGRES_HOST}
+    port: "${env.POSTGRES_PORT}"
+    db: ${env.POSTGRES_DB}
+    user: ${env.POSTGRES_USER}
+    password: ${env.POSTGRES_PASSWORD}
+{% endif %}
 
 llama_stack:
   use_as_library_client: true

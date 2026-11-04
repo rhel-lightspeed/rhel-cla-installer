@@ -1,12 +1,81 @@
-- name: Setup Lightspeed Stack
+---
+- name: Look up existing Lightspeed API key Secret
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ ls_api_key_secret_name }}"
+    namespace: "{{ cla_namespace }}"
+  register: _ls_api_key_info
+  when:
+    - ls_state | default('present') == 'present'
+    - ls_auth_enabled | bool
+    - ls_auth_module == 'api-key-token'
+    - ls_manage_api_key_secret | bool
+    - cla_namespace | length > 0
+  failed_when: false
+  tags:
+    - ls
+    - k8s
+
+- name: Generate Lightspeed API key when Secret is missing
+  ansible.builtin.set_fact:
+    ls_api_key: "{{ lookup('password', '/dev/null length=40 chars=ascii_letters,digits') }}"
+  when:
+    - ls_state | default('present') == 'present'
+    - ls_auth_enabled | bool
+    - ls_auth_module == 'api-key-token'
+    - ls_manage_api_key_secret | bool
+    - (ls_api_key | default('') | length) == 0
+    - (_ls_api_key_info.resources | default([]) | length) == 0
+  no_log: true
+  tags:
+    - ls
+    - k8s
+
+- name: Apply Lightspeed API key Secret
+  kubernetes.core.k8s:
+    state: "{{ ls_state }}"
+    definition:
+      apiVersion: v1
+      kind: Secret
+      metadata:
+        name: "{{ ls_api_key_secret_name }}"
+        namespace: "{{ cla_namespace }}"
+        labels:
+          app: "{{ ls_name }}"
+          app.kubernetes.io/part-of: rhel-cla
+      type: Opaque
+      stringData: "{{ { ls_api_key_secret_key: ls_api_key } }}"
+  when:
+    - ls_auth_enabled | bool
+    - ls_auth_module == 'api-key-token'
+    - ls_manage_api_key_secret | bool
+    - cla_namespace | length > 0
+    - ls_state | default('present') == 'absent'
+      or (ls_api_key | default('') | length) > 0
+  no_log: true
+  tags:
+    - ls
+    - k8s
+
+- name: Setup Lightspeed Stack (k8s)
   kubernetes.core.k8s:
     state: "{{ ls_state }}"
     template: templates/k8s/{{ item }}
   loop:
     - ls-configmap.j2
-    - ls-deployment.j2
-    - ls-route.j2
-    - ls-service.j2
     - ls-serviceaccount.j2
+    - ls-service.j2
+    - ls-deployment.j2
   tags:
     - ls
+    - k8s
+
+- name: Create Lightspeed OpenShift Route
+  kubernetes.core.k8s:
+    state: "{{ ls_state }}"
+    template: templates/k8s/ls-route.j2
+  when: ls_create_route | bool
+  tags:
+    - ls
+    - k8s
