@@ -1,0 +1,46 @@
+apiVersion: cla.rhel.redhat.com/v1alpha1
+kind: RhelCla
+metadata:
+  name: {{ operator_cr_name }}
+  namespace: {{ cla_namespace | default('rhel-cla-system') }}
+  labels:
+    app.kubernetes.io/name: rhel-cla-operator
+    app.kubernetes.io/part-of: rhel-cla
+spec:
+  cla_namespace: {{ cla_namespace | default('rhel-cla-system') }}
+  cla_create_namespace: {{ (cla_create_namespace | default(true) | bool) | ternary('true', 'false') }}
+  cla_network_policies: {{ (cla_network_policies | default(true) | bool) | ternary('true', 'false') }}
+  cla_resource_quota: {{ (cla_resource_quota | default(false) | bool) | ternary('true', 'false') }}
+  cla_granite_connectivity_job: {{ (cla_granite_connectivity_job | default(false) | bool) | ternary('true', 'false') }}
+{% if cla_pull_secret_name | default('') %}
+  cla_pull_secret_name: {{ cla_pull_secret_name }}
+{% endif %}
+{% if cla_granite_host | default('') %}
+  cla_granite_host: {{ cla_granite_host }}
+  cla_granite_port: {{ cla_granite_port | default(8000) }}
+  cla_granite_cidr: {{ cla_granite_cidr }}
+{% endif %}
+  ls_create_route: {{ (ls_create_route | default(true) | bool) | ternary('true', 'false') }}
+  ls_deployment_environment: {{ ls_deployment_environment | default('openshift') }}
+  ls_auth_enabled: {{ (ls_auth_enabled | default(true) | bool) | ternary('true', 'false') }}
+  ls_auth_module: {{ ls_auth_module | default('api-key-token') }}
+  ls_manage_api_key_secret: {{ (ls_manage_api_key_secret | default(true) | bool) | ternary('true', 'false') }}
+  ls_use_postgres: {{ (ls_use_postgres | default(false) | bool) | ternary('true', 'false') }}
+{% if ls_container_image_digest | default('') %}
+  ls_container_image_digest: {{ ls_container_image_digest }}
+{% endif %}
+{% if okp_container_image_digest | default('') %}
+  okp_container_image_digest: {{ okp_container_image_digest }}
+{% endif %}
+{% if rkb_container_image_digest | default('') %}
+  rkb_container_image_digest: {{ rkb_container_image_digest }}
+{% endif %}
+  okp_use_pvc: {{ (okp_use_pvc | default(false) | bool) | ternary('true', 'false') }}
+  rhel_cla_provider: {{ rhel_cla_provider }}
+{% if rhel_cla_provider == 'ramalama' %}
+  ramalama_config:
+{{ ramalama_config | to_nice_yaml(indent=2) | indent(4, first=True) }}
+{% elif rhel_cla_provider == 'vertex' %}
+  vertex_config:
+{{ vertex_config | to_nice_yaml(indent=2) | indent(4, first=True) }}
+{% endif %}

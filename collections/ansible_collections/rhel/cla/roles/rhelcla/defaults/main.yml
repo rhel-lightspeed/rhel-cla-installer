@@ -1,0 +1,18 @@
+---
+# Defaults when CR spec omits fields. Prefer setting via CR / installer -e.
+cla_create_namespace: true
+cla_network_policies: true
+cla_resource_quota: false
+cla_granite_connectivity_job: false
+
+ls_create_route: true
+ls_deployment_environment: openshift
+ls_auth_enabled: true
+ls_auth_module: api-key-token
+ls_manage_api_key_secret: true
+ls_use_postgres: false
+
+okp_state: present
+rkb_state: present
+ls_state: present
+cla_state: present

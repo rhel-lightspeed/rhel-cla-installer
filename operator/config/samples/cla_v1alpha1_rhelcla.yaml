@@ -1,0 +1,29 @@
+apiVersion: cla.rhel.redhat.com/v1alpha1
+kind: RhelCla
+metadata:
+  labels:
+    app.kubernetes.io/name: rhel-cla-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: rhel-cla
+  namespace: rhel-cla-system
+spec:
+  # Same knobs as inventory / -e @examples/openshift-*.yml
+  cla_namespace: rhel-cla-system
+  cla_create_namespace: true
+  cla_network_policies: true
+  cla_resource_quota: true
+  cla_pull_secret_name: redhat-pull-secret
+
+  ls_create_route: true
+  ls_deployment_environment: openshift
+  ls_auth_enabled: true
+  ls_auth_module: api-key-token
+  ls_manage_api_key_secret: true
+  ls_use_postgres: false
+
+  rhel_cla_provider: ramalama
+  ramalama_config:
+    default_model: ibm-granite/granite-4.1-8b-GGUF
+    api_key: sk-no-key-required
+    base_url: http://10.20.1.200:8000/v1
+    model_path: ibm-granite/granite-4.1-8b-GGUF
