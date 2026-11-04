@@ -208,7 +208,10 @@ objects:
 
         authentication:
           module: api-key-token
-          api_key: "${API_KEY}"
+          skip_for_health_probes: true
+          skip_for_metrics: true
+          api_key_config:
+            api_key: "${API_KEY}"
 
         authorization:
           access_rules:
