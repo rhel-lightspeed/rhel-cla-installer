@@ -91,6 +91,7 @@ objects:
             - provider_id: rag-runtime
               provider_type: inline::rag-runtime
               config: {}
+
             - provider_id: model-context-protocol
               provider_type: remote::model-context-protocol
               config: {}
@@ -266,7 +267,7 @@ objects:
             user: ${env.POSTGRES_USER}
             password: ${env.POSTGRES_PASSWORD}
 
-  # ---------- ConfigMap: system prompt ----------
+  # ====== ConfigMap: system prompt ====== #
   - kind: ConfigMap
     apiVersion: v1
     metadata:
@@ -281,7 +282,7 @@ objects:
     data:
       system_prompt.txt: "${SYSTEM_PROMPT}"
 
-  # ---------- Deployment ----------
+  # ====== Deployment ====== #
   - apiVersion: apps/v1
     kind: Deployment
     metadata:
@@ -354,7 +355,7 @@ objects:
                   readOnly: true
 
               env:
-                # ── Logging ──
+                # ====== Logging ====== #
                 - name: LIGHTSPEED_STACK_LOG_LEVEL
                   value: "${LIGHTSPEED_STACK_LOG_LEVEL}"
 
@@ -371,7 +372,7 @@ objects:
                 - name: SENTRY_ENVIRONMENT
                   value: "${DEPLOYMENT_ENVIRONMENT}"
 
-                # ── Vertex AI ──
+                # ====== Vertex AI ====== #
                 - name: VERTEX_AI_PROJECT_ID
                   value: "${VERTEX_AI_PROJECT_ID}"
 
@@ -381,7 +382,7 @@ objects:
                 - name: GOOGLE_APPLICATION_CREDENTIALS
                   value: /etc/gcp/credentials.json
 
-                # ── Llama Stack internal storage ──
+                # ====== Llama Stack internal storage ====== #
                 # Llama Stack's distribution registry creates a SQLite
                 # kvstore during initialization regardless of the
                 # metadata_store config in llama-stack.yml.  Its default path
