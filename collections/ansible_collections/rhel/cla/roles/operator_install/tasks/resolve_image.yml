@@ -1,0 +1,163 @@
+---
+# Resolve operator_image for either build (podman + cluster registry) or release (pullspec).
+- name: Validate operator_image_mode
+  ansible.builtin.assert:
+    that:
+      - operator_image_mode in ['build', 'release']
+    fail_msg: "operator_image_mode must be 'build' or 'release' (got {{ operator_image_mode }})"
+
+- name: Require operator_image when using a released pullspec
+  ansible.builtin.assert:
+    that:
+      - (operator_image | default('') | length) > 0
+    fail_msg: >-
+      operator_image_mode=release requires operator_image to be a cluster-pullable
+      pullspec (Quay, mirror, or catalog-related image).
+  when: operator_image_mode == 'release'
+
+- name: Locate operator Containerfile
+  ansible.builtin.stat:
+    path: "{{ operator_build_context }}/{{ operator_containerfile }}"
+  register: _operator_cf_stat
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Fail when operator Containerfile is missing
+  ansible.builtin.fail:
+    msg: >-
+      operator_image_mode=build needs {{ operator_build_context }}/{{ operator_containerfile }}
+      (installer checkout with operator/). Or set operator_image_mode=release with
+      operator_image=<published-pullspec>.
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+    - not (_operator_cf_stat.stat.exists | default(false))
+
+- name: Ensure container runtime exists for operator build
+  ansible.builtin.command:
+    argv:
+      - "{{ operator_container_runtime }}"
+      - "--version"
+  register: _crt_version
+  changed_when: false
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Ensure operator namespace exists before image push
+  kubernetes.core.k8s:
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ operator_namespace }}"
+        labels:
+          app.kubernetes.io/name: rhel-cla-operator
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Discover OpenShift integrated registry (public host for push)
+  ansible.builtin.command:
+    argv:
+      - oc
+      - registry
+      - info
+  register: _oc_registry_info
+  changed_when: false
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+    - (operator_image | default('') | length) == 0
+
+- name: Set local build tag and cluster push/pull specs
+  ansible.builtin.set_fact:
+    _operator_local_tag: "{{ operator_image_name }}:{{ operator_image_tag }}"
+    _operator_push_image: >-
+      {{
+        (operator_image | length > 0)
+        | ternary(
+            operator_image,
+            (_oc_registry_info.stdout | trim)
+              ~ '/' ~ operator_namespace ~ '/' ~ operator_image_name ~ ':' ~ operator_image_tag
+          )
+      }}
+    # In-cluster pullspec (Deployment runs inside the cluster)
+    _operator_pull_image: >-
+      {{
+        (operator_image | length > 0)
+        | ternary(
+            operator_image,
+            'image-registry.openshift-image-registry.svc:5000/'
+              ~ operator_namespace ~ '/' ~ operator_image_name ~ ':' ~ operator_image_tag
+          )
+      }}
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Build operator image with podman
+  ansible.builtin.command:
+    argv:
+      - "{{ operator_container_runtime }}"
+      - "build"
+      - "-f"
+      - "{{ operator_containerfile }}"
+      - "-t"
+      - "{{ _operator_local_tag }}"
+      - "{{ operator_build_context }}"
+    chdir: "{{ operator_build_context }}"
+  register: _operator_podman_build
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Log in to OpenShift integrated registry for push
+  ansible.builtin.shell: |
+    set -euo pipefail
+    TOKEN="$(oc whoami -t)"
+    USER="$(oc whoami)"
+    REGISTRY="$(oc registry info)"
+    {{ operator_container_runtime }} login -u "$USER" -p "$TOKEN" "$REGISTRY"
+  args:
+    executable: /bin/bash
+  no_log: true
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+    - (operator_image | default('') | length) == 0
+
+- name: Tag operator image for cluster registry
+  ansible.builtin.command:
+    argv:
+      - "{{ operator_container_runtime }}"
+      - "tag"
+      - "{{ _operator_local_tag }}"
+      - "{{ _operator_push_image }}"
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Push operator image to cluster registry
+  ansible.builtin.command:
+    argv:
+      - "{{ operator_container_runtime }}"
+      - "push"
+      - "{{ _operator_push_image }}"
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Use in-cluster pullspec for the operator Deployment (build mode)
+  ansible.builtin.set_fact:
+    operator_image: "{{ _operator_pull_image }}"
+  when:
+    - operator_state | default('present') == 'present'
+    - operator_image_mode == 'build'
+
+- name: Show resolved operator image
+  ansible.builtin.debug:
+    msg: "operator_image_mode={{ operator_image_mode }} operator_image={{ operator_image }}"
+  when: operator_state | default('present') == 'present'

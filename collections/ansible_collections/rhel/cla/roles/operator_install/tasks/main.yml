@@ -1,0 +1,100 @@
+---
+- name: Normalize operator paths
+  ansible.builtin.set_fact:
+    operator_dir: "{{ operator_dir | realpath }}"
+    operator_config_dir: "{{ (operator_config_dir | default(operator_dir ~ '/config')) | realpath }}"
+    operator_build_context: "{{ (operator_build_context | default(operator_dir | dirname)) | realpath }}"
+
+- name: Ensure operator config directory exists
+  ansible.builtin.stat:
+    path: "{{ operator_config_dir }}/default"
+  register: _operator_config_stat
+
+- name: Fail when operator kustomize config is missing
+  ansible.builtin.fail:
+    msg: >-
+      Operator config not found at {{ operator_config_dir }}/default.
+      Run from the rhel-cla-installer checkout (or set operator_config_dir).
+  when: not _operator_config_stat.stat.exists
+
+- name: Resolve operator image (build with podman or use release pullspec)
+  ansible.builtin.include_tasks: resolve_image.yml
+  when: operator_state | default('present') == 'present'
+  tags:
+    - operator
+    - operator_image
+
+- name: Set controller image in kustomize overlay
+  ansible.builtin.command:
+    argv:
+      - kustomize
+      - edit
+      - set
+      - image
+      - "controller={{ operator_image }}"
+    chdir: "{{ operator_config_dir }}/manager"
+  when: operator_state | default('present') == 'present'
+  changed_when: true
+
+- name: Build operator manifests with kustomize
+  ansible.builtin.command:
+    argv:
+      - kustomize
+      - build
+      - "{{ operator_config_dir }}/default"
+  register: _operator_manifests
+  changed_when: false
+  when: operator_state | default('present') == 'present'
+
+- name: Fail when kustomize build failed
+  ansible.builtin.fail:
+    msg: >-
+      kustomize build failed. Install kustomize and ensure
+      operator_image={{ operator_image }} is set. stderr:
+      {{ _operator_manifests.stderr | default('') }}
+  when:
+    - operator_state | default('present') == 'present'
+    - _operator_manifests is failed or (_operator_manifests.rc | default(1)) != 0
+
+- name: Apply operator CRDs, RBAC, and Deployment
+  kubernetes.core.k8s:
+    state: present
+    definition: "{{ item }}"
+  loop: "{{ _operator_manifests.stdout | from_yaml_all | select('truthy') | list }}"
+  when: operator_state | default('present') == 'present'
+  tags:
+    - operator
+
+- name: Build operator manifests for uninstall
+  ansible.builtin.command:
+    argv:
+      - kustomize
+      - build
+      - "{{ operator_config_dir }}/default"
+  register: _operator_manifests_absent
+  changed_when: false
+  when: operator_state | default('present') == 'absent'
+  failed_when: false
+
+- name: Remove operator CRDs, RBAC, and Deployment
+  kubernetes.core.k8s:
+    state: absent
+    definition: "{{ item }}"
+  loop: "{{ _operator_manifests_absent.stdout | default('') | from_yaml_all | select('truthy') | list }}"
+  when:
+    - operator_state | default('present') == 'absent'
+    - (_operator_manifests_absent.stdout | default('') | length) > 0
+  tags:
+    - operator
+
+- name: Apply or remove RhelCla CR generated from installer vars
+  kubernetes.core.k8s:
+    state: "{{ operator_state }}"
+    template: templates/operator/rhelcla-cr.j2
+  when:
+    - operator_apply_cr | bool
+    - rhel_cla_provider is defined
+    - (rhel_cla_provider | string | length) > 0
+  tags:
+    - operator
+    - cr
