@@ -241,9 +241,6 @@ objects:
           disable_query_system_prompt: true
           disable_shield_ids_override: true
 
-        rlsapi_v1:
-          allow_verbose_infer: ${ALLOW_VERBOSE_INFER}
-
         mcp_servers:
           - name: rhel-knowledge-bridge
             provider_id: "model-context-protocol"
@@ -253,12 +250,6 @@ objects:
         user_data_collection:
           feedback_enabled: false
           transcripts_enabled: false
-
-        splunk:
-          enabled: ${SPLUNK_ENABLED}
-          url: "${SPLUNK_URL}"
-          token_path: /etc/splunk/token
-          index: "${SPLUNK_INDEX}"
 
         # Quota limiter storage backend — uses the same PostgreSQL instance
         # as llama-stack (env vars injected from the postgres secret).
@@ -302,9 +293,6 @@ objects:
 
       template:
         metadata:
-          annotations:
-            deployment-version: "${DEPLOYMENT_VERSION}"
-
           labels:
             service: rhel-cla
             app: "${NAME}"
@@ -364,16 +352,6 @@ objects:
 
                 - name: LLAMA_STACK_LOGGING
                   value: "${LLAMA_STACK_LOGGING}"
-
-                # ── Sentry / GlitchTip ──
-                - name: SENTRY_DSN
-                  valueFrom:
-                    secretKeyRef:
-                      name: "${SENTRY_SECRET_NAME}"
-                      key: dsn
-
-                - name: SENTRY_ENVIRONMENT
-                  value: "${DEPLOYMENT_ENVIRONMENT}"
 
                 # ====== Vertex AI ====== #
                 - name: VERTEX_AI_PROJECT_ID
@@ -564,38 +542,14 @@ parameters:
   - name: ROOT_PATH
     displayName: Root Path
     description: URL path prefix for reverse proxy deployments.
-    value: ""
-
-  - name: SPLUNK_ENABLED
-    displayName: Splunk Logging Enabled
-    description: >-
-      Enable or disable Splunk telemetry logging. Must be lowercase
-      true or false (YAML boolean).
-    value: "false"
-
-  - name: SPLUNK_URL
-    displayName: Splunk HEC URL
-    description: Splunk HTTP Event Collector endpoint URL.
-    value: ""
-
-  - name: SPLUNK_INDEX
-    displayName: Splunk Index
-    description: Splunk index for telemetry events.
-    value: ""
-
-  - name: SPLUNK_SECRET_NAME
-    displayName: Splunk Secret Name
-    description: >-
-      Name of the OpenShift secret containing the Splunk HEC token.
-      Expected key: token.
-    value: "splunk"
+    value: "/api/lightspeed"
 
   - name: POSTGRES_SECRET_NAME
     displayName: PostgreSQL Secret Name
     description: >-
       Name of the OpenShift secret containing PostgreSQL connection details.
       Expected keys: db.host, db.port, db.name, db.user, db.password.
-    value: rls-lscore-db
+    value: rhel-cla-db
     required: true
 
   - name: SYSTEM_PROMPT
@@ -674,15 +628,6 @@ parameters:
       also point to this Service name.
     value: lightspeed-stack
 
-  - name: SENTRY_SECRET_NAME
-    displayName: Sentry Secret Name
-    description: >-
-      Name of the OpenShift secret containing the GlitchTip/Sentry DSN.
-      Expected key: dsn. Auto-created by the GlitchTip reconciler from
-      the project name (e.g. lightspeed-stack-prod-dsn).
-    value: "lightspeed-stack-dsn"
-    required: true
-
   - name: DEPLOYMENT_ENVIRONMENT
     displayName: Deployment Environment
     description: >-
@@ -690,14 +635,6 @@ parameters:
       environment in saas.yml. Values: development, stage, production.
     value: dev
     required: true
-
-  - name: DEPLOYMENT_VERSION
-    displayName: Deployment Version
-    description: >-
-      Increment to force a pod rollout without changing config or
-      image tag. Changing this value modifies the pod template
-      annotation, triggering a new rollout.
-    value: "1"
 
   - name: LIGHTSPEED_STACK_LOG_LEVEL
     displayName: Log Level
@@ -720,11 +657,3 @@ parameters:
       Examples: "all=debug", "inference=debug,core=info". Empty
       string uses the default (info).
     value: "all=info"
-
-  - name: ALLOW_VERBOSE_INFER
-    displayName: Allow verbose /v1/infer metadata
-    description: >-
-      When true, the server honors include_metadata on POST /v1/infer
-      (development/testing). When false, verbose metadata is never returned.
-      Must be lowercase true or false (YAML boolean). Keep false in production.
-    value: "false"
