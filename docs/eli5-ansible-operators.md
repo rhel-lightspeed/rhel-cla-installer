@@ -2,9 +2,11 @@
 
 **Audience:** engineers comfortable with Ansible + OpenShift YAML, new to
 operators.  
-**Goal:** enough vocabulary to review small PRs without needing to build an
-operator from scratch first.  
-**Comment here / on the epic PR** — this is a learning doc, not frozen API.
+**Goal:** enough vocabulary to join the **design** discussion (and later review
+small PRs) without building an operator from scratch first.  
+**Now:** skim this, then comment on
+[design-openshift-operator.md](design-openshift-operator.md) / epic #78.  
+Implementation PRs are paused until that design has buy-in.
 
 ---
 

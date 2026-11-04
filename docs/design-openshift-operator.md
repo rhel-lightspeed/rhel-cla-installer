@@ -1,12 +1,19 @@
 # Design: OpenShift CLA via k8s SoT (+ optional operator)
 
-**Status:** draft for comment (epic [#78](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/78))  
+**Status:** draft — **needs team buy-in before implementation merges**  
+**Epic:** [#78](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/78) (docs-only, stays draft)  
 **ELI5 companion:** [eli5-ansible-operators.md](eli5-ansible-operators.md)  
 **Lab notes:** [../openshift-deployment/OC-Deployment.md](../openshift-deployment/OC-Deployment.md)
 
-This document is the **commentable design**. Implementation PRs should be small,
-link here, and teach one idea at a time. Code already sketched in earlier
-branches is a prototype to evolve with the team — not a take-it-or-leave-it dump.
+## What to do *right now*
+
+1. **Read and comment on this design** (and skim the ELI5 if operators are new).  
+2. Agree goals, Path A vs B, SoT invariant, and the wave breakdown in §3.  
+3. **Do not** treat coarse preview PRs #79–#82 as the review queue — they only
+   sketch four impact areas. After buy-in we open **role-sized** PRs that link
+   back here.
+
+Implementation without design agreement is explicitly paused.
 
 ---
 
@@ -90,9 +97,10 @@ this doc §, and (where possible) a tiny check that **local install still works*
 | 5 | `rhelcla` calls same k8s chain | Reconcile = Path A | 1f + 4 |
 | 6 | `rhel.cla.operator` one-shot build\|release | Packaging UX | 5 |
 
-**Note:** Current stacked PRs #79–#82 are coarser prototypes. Prefer **closing or
-pausing** them in favor of wave-1 role PRs once this design is accepted, then
-re-introduce operator waves 2–6. Slice compare links can stay for archaeology.
+**Preview only:** Draft PRs #79–#82 sketch four coarse areas (k8s SoT → operator
+scaffold → CR/reconcile → one-shot). They are **paused / not for merge**. After
+this design is accepted, replace them with wave-1+ PRs (or reopen thinner
+slices from that work). Nothing is thrown away — it becomes the backlog shape.
 
 ---
 
@@ -157,9 +165,10 @@ Call these out in `lightspeed_stack` PRs (wave 1d):
 
 | Date | Decision | Owner |
 | --- | --- | --- |
-| 2026-11-04 | Epic #78 stays **draft** docs/overview; implementation via smaller PRs | Team |
+| 2026-11-04 | Epic #78 stays **draft** docs/overview; **design buy-in first** | Team |
 | 2026-11-04 | SoT = role `templates/k8s`; `openshift/` Templates = reference | Draft |
-| TBD | Pause/replace coarse stack #79–#82 with wave-1 role PRs | TBD |
+| 2026-11-04 | Coarse stack #79–#82 → **draft / paused** (preview of 4 areas only) | Team |
+| TBD | After design ACK: wave-1 role PRs (replace #79–#82) | TBD |
 | TBD | Eng tech sync: 30‑min operator show-and-tell | TBD |
 
 ---

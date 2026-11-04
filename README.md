@@ -101,24 +101,18 @@ See the [upgrading] documentation for details on how to upgrade.
 
 # Deploy on OpenShift #
 
-Work tracked under draft epic
+Tracked under draft epic
 [#78](https://github.com/rhel-lightspeed/rhel-cla-installer/pull/78).
-**Start with the design + ELI5** (commentable), then small follow-up PRs:
 
-- Design: [`docs/design-openshift-operator.md`](docs/design-openshift-operator.md)
-- ELI5 operators: [`docs/eli5-ansible-operators.md`](docs/eli5-ansible-operators.md)
-- Lab notes: [`openshift-deployment/OC-Deployment.md`](openshift-deployment/OC-Deployment.md)
-- Manual TESTPLAN: [`openshift-deployment/TESTPLAN.md`](openshift-deployment/TESTPLAN.md)
+**Right now: design buy-in only** (implementation merges paused):
 
-Coarse stack PRs (#79–#82) were a first split; prefer **role-sized** PRs that
-link the design doc (see design §3). Legacy Templates under
-[`openshift/`](openshift/) stay reference-only.
+1. [`docs/design-openshift-operator.md`](docs/design-openshift-operator.md) — comment / ACK  
+2. [`docs/eli5-ansible-operators.md`](docs/eli5-ansible-operators.md) — optional vocabulary  
 
-Path A (no operator required to learn the SoT):
-
-```
-./rhel-cla-installer rhel.cla.k8s -e @examples/openshift-lab-vars.yml
-```
+After agreement, role-sized PRs land in waves (design §3). Coarse drafts
+#79–#82 are **previews only**, not the review queue. Lab notes:
+[`openshift-deployment/OC-Deployment.md`](openshift-deployment/OC-Deployment.md).
+Legacy Templates under [`openshift/`](openshift/) stay reference-only.
 
 # Client Configurations #
 
