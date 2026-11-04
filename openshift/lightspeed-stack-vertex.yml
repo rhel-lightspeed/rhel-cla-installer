@@ -19,30 +19,28 @@ objects:
         service: rhel-cla
         app: "${NAME}"
 
-  # ====== ConfigMap: run.yaml (llama-stack library config) ====== #
+  # ====== ConfigMap: llama-stack.yaml (llama-stack library config) ====== #
   - kind: ConfigMap
     apiVersion: v1
     metadata:
-      name: "${NAME}-run-config"
-      annotations:
-        qontract.recycle: "true"
-
+      name: "${NAME}-llama-stack-config"
       labels:
         service: rhel-cla
         app: "${NAME}"
 
     data:
-      run.yaml: |
+      llama-stack.yml: |
         version: 2
         image_name: vertexai-configuration
         external_providers_dir: /app-root/providers.d
         apis:
-          - inference
           - agents
-          - safety
-          - vector_io
           - files
+          - inference
+          - responses
+          - safety
           - tool_runtime
+          - vector_io
 
         server:
           port: 8321
@@ -205,7 +203,7 @@ objects:
 
         llama_stack:
           use_as_library_client: true
-          library_client_config_path: /app-root/run.yaml
+          library_client_config_path: /app-root/llama-stack.yml
 
         authentication:
           module: api-key-token
@@ -310,9 +308,9 @@ objects:
         spec:
           serviceAccountName: "${NAME}"
           volumes:
-            - name: run-config
+            - name: llama-stack-config
               configMap:
-                name: "${NAME}-run-config"
+                name: "${NAME}-llama-stack-config"
 
             - name: lightspeed-stack-config
               configMap:
@@ -337,9 +335,9 @@ objects:
                   protocol: TCP
 
               volumeMounts:
-                - name: run-config
-                  mountPath: /app-root/run.yaml
-                  subPath: run.yaml
+                - name: llama-stack-config
+                  mountPath: /app-root/llama-stack.yml
+                  subPath: llama-stack.yml
                   readOnly: true
 
                 - name: lightspeed-stack-config
@@ -386,7 +384,7 @@ objects:
                 # ── Llama Stack internal storage ──
                 # Llama Stack's distribution registry creates a SQLite
                 # kvstore during initialization regardless of the
-                # metadata_store config in run.yaml.  Its default path
+                # metadata_store config in llama-stack.yml.  Its default path
                 # uses the env-var substitution syntax
                 # "${env.SQLITE_STORE_DIR:=<path>}", which is treated
                 # as a literal directory name when the variable is
@@ -554,7 +552,7 @@ parameters:
     description: >-
       Fully-qualified SDK-native model name used as the default inference
       model. Must be set explicitly per environment in saas.yml.
-      Must be one of the models registered in the run-config ConfigMap.
+      Must be one of the models registered in the llama-stack-config ConfigMap.
       Example: publishers/google/models/gemini-2.5-flash
     value: publishers/google/models/gemini-2.5-flash
     required: true
