@@ -1,0 +1,13 @@
+# Build from repo root:
+#   podman build -f operator/Containerfile -t rhel-cla-operator:dev .
+# Reconciles RhelCla via collection role rhel.cla.rhelcla (same tasks_from: k8s chain).
+FROM quay.io/operator-framework/ansible-operator:v1.36.1
+
+COPY operator/requirements.yml ${HOME}/requirements.yml
+RUN ansible-galaxy collection install -r ${HOME}/requirements.yml \
+ && chmod -R ug+rwx ${HOME}/.ansible
+
+COPY collections/ansible_collections/rhel ${HOME}/.ansible/collections/ansible_collections/rhel
+COPY operator/watches.yaml ${HOME}/watches.yaml
+# ansible-operator watches `role: rhelcla` → ${HOME}/roles/rhelcla
+COPY collections/ansible_collections/rhel/cla/roles/rhelcla ${HOME}/roles/rhelcla

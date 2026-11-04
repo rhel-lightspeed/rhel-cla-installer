@@ -1,0 +1,18 @@
+---
+# Remove RhelCla CR and operator manifests.
+#   ./rhel-cla-installer rhel.cla.operator_uninstall -e @examples/openshift-lab-vars.yml
+- name: Uninstall RHEL CLA operator resources
+  hosts: localhost
+  gather_facts: false
+  become: false
+  collections:
+    - kubernetes.core
+  vars:
+    operator_state: absent
+    operator_apply_cr: true
+    operator_dir: "{{ playbook_dir }}/../../../../../operator"
+
+  tasks:
+    - name: Remove CR and operator manifests
+      ansible.builtin.import_role:
+        name: rhel.cla.operator_install

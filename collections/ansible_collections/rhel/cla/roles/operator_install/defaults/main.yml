@@ -1,0 +1,24 @@
+---
+# Install ansible-operator + apply RhelCla generated from the same vars as rhel.cla.k8s.
+operator_state: present
+
+# operator/ tree in the installer checkout (PROJECT, config/, Containerfile, watches)
+operator_dir: "{{ playbook_dir }}/../../../../../operator"
+operator_config_dir: "{{ operator_dir }}/config"
+
+# Image source:
+#   build   — podman build operator/Containerfile, push to cluster registry (default)
+#   release — use operator_image pullspec (Quay / catalog later)
+operator_image_mode: build
+operator_image: ""
+
+operator_image_name: rhel-cla-operator
+operator_image_tag: dev
+operator_container_runtime: podman
+operator_containerfile: operator/Containerfile
+# Build context = repo root (Containerfile COPYs collections/ + operator/)
+operator_build_context: "{{ operator_dir | dirname }}"
+
+operator_apply_cr: true
+operator_cr_name: rhel-cla
+operator_namespace: rhel-cla-operator-system

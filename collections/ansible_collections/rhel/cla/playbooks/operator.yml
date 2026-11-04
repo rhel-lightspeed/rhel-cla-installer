@@ -1,0 +1,22 @@
+---
+# One-shot: install ansible-operator + apply RhelCla from inventory / -e vars.
+#
+#   ./rhel-cla-installer rhel.cla.operator -e @examples/openshift-lab-vars.yml
+#   ./rhel-cla-installer rhel.cla.operator -e @examples/openshift-lab-vars.yml \
+#     -e operator_image_mode=release \
+#     -e operator_image=quay.io/example/rhel-cla-operator:1.2.3
+#
+# Prerequisites: oc login, podman (build mode), pull + OKP secrets in target ns.
+- name: Install RHEL CLA operator and apply CR
+  hosts: localhost
+  gather_facts: false
+  become: false
+  collections:
+    - kubernetes.core
+  vars:
+    operator_dir: "{{ playbook_dir }}/../../../../../operator"
+
+  tasks:
+    - name: Install operator and apply generated RhelCla
+      ansible.builtin.import_role:
+        name: rhel.cla.operator_install

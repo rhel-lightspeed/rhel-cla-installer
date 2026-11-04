@@ -6,8 +6,8 @@ __pycache__/
 .hermeto-out/
 
 /local
-/roles/
 /scratch/
 /inventory/*
 !/inventory/hosts.example.yml
 /openshift/params
+/bin/

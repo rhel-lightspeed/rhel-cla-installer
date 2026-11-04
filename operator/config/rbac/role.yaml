@@ -1,0 +1,101 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: manager-role
+rules:
+  ##
+  ## Base operator rules + stack objects applied by role templates/k8s
+  ##
+  - apiGroups:
+      - ""
+    resources:
+      - configmaps
+      - secrets
+      - services
+      - serviceaccounts
+      - pods
+      - pods/exec
+      - pods/log
+      - namespaces
+      - persistentvolumeclaims
+      - resourcequotas
+      - limitranges
+      - events
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - apps
+    resources:
+      - deployments
+      - daemonsets
+      - replicasets
+      - statefulsets
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - batch
+    resources:
+      - jobs
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - networking.k8s.io
+    resources:
+      - networkpolicies
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  - apiGroups:
+      - route.openshift.io
+    resources:
+      - routes
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+  ##
+  ## Rules for cla.rhel.redhat.com/v1alpha1, Kind: RhelCla
+  ##
+  - apiGroups:
+      - cla.rhel.redhat.com
+    resources:
+      - rhelclas
+      - rhelclas/status
+      - rhelclas/finalizers
+    verbs:
+      - create
+      - delete
+      - get
+      - list
+      - patch
+      - update
+      - watch
+# +kubebuilder:scaffold:rules

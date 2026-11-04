@@ -1,0 +1,8 @@
+---
+galaxy_info:
+  role_name: rhelcla
+  author: rhel-lightspeed
+  description: Ansible-operator reconcile role for RhelCla (same k8s task chain as rhel.cla.k8s)
+  license: Apache-2.0
+  min_ansible_version: "2.15"
+dependencies: []

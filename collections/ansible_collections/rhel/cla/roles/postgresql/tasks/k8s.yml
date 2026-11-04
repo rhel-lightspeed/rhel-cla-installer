@@ -1,0 +1,51 @@
+---
+- name: Look up existing PostgreSQL Secret
+  kubernetes.core.k8s_info:
+    api_version: v1
+    kind: Secret
+    name: "{{ pg_name }}"
+    namespace: "{{ cla_namespace }}"
+  register: _pg_secret_info
+  when:
+    - pg_state | default('present') == 'present'
+    - cla_namespace | length > 0
+  failed_when: false
+  tags:
+    - postgresql
+    - k8s
+
+- name: Generate PostgreSQL password when Secret is missing
+  ansible.builtin.set_fact:
+    pg_password: "{{ lookup('password', '/dev/null length=32 chars=ascii_letters,digits') }}"
+  when:
+    - pg_state | default('present') == 'present'
+    - (pg_password | default('') | length) == 0
+    - (_pg_secret_info.resources | default([]) | length) == 0
+  no_log: true
+  tags:
+    - postgresql
+    - k8s
+
+- name: Apply PostgreSQL Secret
+  kubernetes.core.k8s:
+    state: "{{ pg_state }}"
+    template: templates/k8s/pg-secret.j2
+  when:
+    - pg_state | default('present') == 'absent'
+      or (pg_password | default('') | length) > 0
+      or (_pg_secret_info.resources | default([]) | length) == 0
+  no_log: true
+  tags:
+    - postgresql
+    - k8s
+
+- name: Apply PostgreSQL Service and Deployment
+  kubernetes.core.k8s:
+    state: "{{ pg_state }}"
+    template: templates/k8s/{{ item }}
+  loop:
+    - pg-service.j2
+    - pg-deployment.j2
+  tags:
+    - postgresql
+    - k8s

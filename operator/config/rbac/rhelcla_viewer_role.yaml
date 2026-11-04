@@ -1,0 +1,23 @@
+# permissions for end users to view rhelclas.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: rhel-cla-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: rhelcla-viewer-role
+rules:
+- apiGroups:
+  - cla.rhel.redhat.com
+  resources:
+  - rhelclas
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - cla.rhel.redhat.com
+  resources:
+  - rhelclas/status
+  verbs:
+  - get
