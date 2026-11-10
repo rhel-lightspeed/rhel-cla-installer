@@ -11,19 +11,8 @@ USER 0
 
 COPY .konflux/pip/*.txt /opt/setup/
 
-# Galaxy collections: build-zipapp.py installs them into the collections
-# layout with ansible-galaxy. Konflux hermetic builds install the tarballs
-# prefetched by Hermeto's generic fetcher (requirements/artifacts.lock.yaml)
-# with --offline; local builds install the collections pinned in
-# requirements/requirements.yml from galaxy.ansible.com. The pip
-# requirements are installed by build-zipapp.py into dedicated virtual
-# environments; under hermetic builds they are served from the prefetched
-# dependency store (PIP_FIND_LINKS/PIP_NO_INDEX).
-COPY requirements/requirements.yml /opt/setup/requirements.yml
-
-# Add the local rhel namespace alongside the galaxy collections.
-COPY collections/ansible_collections/rhel \
-     /opt/setup/collections/ansible_collections/rhel
+# Add the required collections.
+COPY collections/ansible_collections/ /opt/setup/collections/ansible_collections/
 
 COPY scripts/build-zipapp.py scripts/install-toolchain.sh /opt/setup/
 
