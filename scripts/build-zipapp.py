@@ -98,8 +98,7 @@ def main():
     ansible_venv_python = ansible_venv / "bin" / "python"
     install_requirements(ansible_venv_python, "/opt/setup/requirements-3.12.txt")
 
-    # Install galaxy collections and bundle them into the installer venv
-    install_collections(ansible_venv / "bin" / "ansible-galaxy")
+    # Bundle collections in the installer venv
     shutil.copytree("/opt/setup/collections/ansible_collections", ansible_site_packages / "ansible_collections")
 
     # Build zipapp
