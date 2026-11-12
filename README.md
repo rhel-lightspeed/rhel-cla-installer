@@ -1,5 +1,5 @@
 # Red Hat Enterprise Linux Command Line Assistant Installer #
-
+test
 This is the installer for the self-managed RHEL CLA. It supports local and remote installations. OpenShift support is still in development.
 
 # Getting Started #
