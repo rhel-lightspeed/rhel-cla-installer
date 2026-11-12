@@ -28,8 +28,16 @@
       "versioning": "redhat"
     },
     {
-      "matchDepNames": ["registry.access.redhat.com/hi/python"],
-      "groupName": "python builder image"
+      "description": "Ship builder and runtime base image updates together, quickly: they usually carry CVE fixes",
+      "matchDepNames": [
+        "registry.access.redhat.com/hi/python",
+        "registry.access.redhat.com/ubi10-minimal"
+      ],
+      "matchUpdateTypes": ["major", "minor", "patch", "pin", "digest"],
+      "groupName": "container base images",
+      "groupSlug": "container-base-images",
+      "minimumReleaseAge": "0 days",
+      "schedule": ["at any time"]
     }
   ]
 }
