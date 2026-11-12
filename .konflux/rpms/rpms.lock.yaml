@@ -228,13 +228,27 @@ arches:
     name: mpfr
     evr: 4.2.2-4.1.hum1
     sourcerpm: mpfr-4.2.2-4.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/o/openssl-devel-3.5.9-0.3.hum1.aarch64.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/o/openssl-devel-3.5.9-0.4.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
-    size: 4558447
-    checksum: sha256:f24f02d18d6277598300906ca2ffd6a0937694a66f6888e00b156efc216eed01
+    size: 4547699
+    checksum: sha256:68606ae5d8fca2b9134f5342dc40b45c46f5d8379e8cd02226f9b1181a83196e
     name: openssl-devel
-    evr: 1:3.5.9-0.3.hum1
-    sourcerpm: openssl-3.5.9-0.3.hum1.src.rpm
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/o/openssl-fips-provider-upstream-3.5.9-0.4.hum1.aarch64.rpm
+    repoid: public-hummingbird-aarch64-rpms
+    size: 748866
+    checksum: sha256:9b8f39998c2966ccfb7995004fde5d1487283b2be7b9b8c95290aab8c0cb2731
+    name: openssl-fips-provider-upstream
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/o/openssl-libs-3.5.9-0.4.hum1.aarch64.rpm
+    repoid: public-hummingbird-aarch64-rpms
+    size: 2249420
+    checksum: sha256:33285dea716df3f14a6ad90063b4869b4bd3eeca65db3c3e0fab1e01496449ca
+    name: openssl-libs
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/pkgconf-2.5.1-2.1.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
     size: 56906
@@ -400,12 +414,12 @@ arches:
     checksum: sha256:6825b564f6e7feadf3c12623843a52f989a1ac403974c59d6dcbd84215fbb4b2
     name: mpfr
     evr: 4.2.2-4.1.hum1
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/o/openssl-3.5.9-0.3.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/o/openssl-3.5.9-0.4.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
-    size: 54117253
-    checksum: sha256:4686e42da46055cd00fef95b5f280a49a8dc0df16c43db199ed3993fe6da2c81
+    size: 54123408
+    checksum: sha256:c162b18a3789d26b91a6d805c27fea8d53410f5fd20e46f402b26065663ea5d9
     name: openssl
-    evr: 1:3.5.9-0.3.hum1
+    evr: 1:3.5.9-0.4.hum1
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/pkgconf-2.5.1-2.1.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
     size: 368738
@@ -637,13 +651,27 @@ arches:
     name: mpfr
     evr: 4.2.2-4.1.hum1
     sourcerpm: mpfr-4.2.2-4.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/o/openssl-devel-3.5.9-0.3.hum1.x86_64.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/o/openssl-devel-3.5.9-0.4.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
-    size: 4559208
-    checksum: sha256:62fe740f97f47b0ebe61d5b9bf82f32ecb251b359ecff73fe2da4550be785516
+    size: 4548452
+    checksum: sha256:2f182936bf2b076b3971e3d5ee342cfa920fa1d3dfb338a0100555fc7ed6259d
     name: openssl-devel
-    evr: 1:3.5.9-0.3.hum1
-    sourcerpm: openssl-3.5.9-0.3.hum1.src.rpm
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/o/openssl-fips-provider-upstream-3.5.9-0.4.hum1.x86_64.rpm
+    repoid: public-hummingbird-x86_64-rpms
+    size: 876521
+    checksum: sha256:f2c30ce5a142df6237d03238a563a32046dbd6d0dbdb8c3a7902d72d254564d3
+    name: openssl-fips-provider-upstream
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/o/openssl-libs-3.5.9-0.4.hum1.x86_64.rpm
+    repoid: public-hummingbird-x86_64-rpms
+    size: 2486543
+    checksum: sha256:41c9e02f105384cb2337cf210ccc26faf3521c0f0718265fc7596c0a538cc028
+    name: openssl-libs
+    evr: 1:3.5.9-0.4.hum1
+    sourcerpm: openssl-3.5.9-0.4.hum1.src.rpm
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/pkgconf-2.5.1-2.1.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
     size: 57459
@@ -809,12 +837,12 @@ arches:
     checksum: sha256:6825b564f6e7feadf3c12623843a52f989a1ac403974c59d6dcbd84215fbb4b2
     name: mpfr
     evr: 4.2.2-4.1.hum1
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/o/openssl-3.5.9-0.3.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/o/openssl-3.5.9-0.4.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
-    size: 54117253
-    checksum: sha256:4686e42da46055cd00fef95b5f280a49a8dc0df16c43db199ed3993fe6da2c81
+    size: 54123408
+    checksum: sha256:c162b18a3789d26b91a6d805c27fea8d53410f5fd20e46f402b26065663ea5d9
     name: openssl
-    evr: 1:3.5.9-0.3.hum1
+    evr: 1:3.5.9-0.4.hum1
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/pkgconf-2.5.1-2.1.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
     size: 368738
