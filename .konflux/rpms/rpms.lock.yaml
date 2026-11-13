@@ -270,27 +270,27 @@ arches:
     name: pkgconf-pkg-config
     evr: 2.5.1-2.1.hum1
     sourcerpm: pkgconf-2.5.1-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-3.12.16-2.1.hum1.aarch64.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-3.12.16-2.2.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
-    size: 33820
-    checksum: sha256:635aaaa6998646ab8c2a656897722fbb7e8e683d14cd865764c10a137c89ea60
+    size: 33819
+    checksum: sha256:9c5fd1ae52095d17db0fe47231afb4603b54c54320f66e2126d5d15f8767afb8
     name: python3.12
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-devel-3.12.16-2.1.hum1.aarch64.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-devel-3.12.16-2.2.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
-    size: 338688
-    checksum: sha256:e39c85a4c037a72004fffd23efa760b25db406e0778a5acb2aee606958be740d
+    size: 338696
+    checksum: sha256:04b8825270502e6ec83b011a92c9f085f6745dd7f4ccc4814e3365c73274162f
     name: python3.12-devel
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-libs-3.12.16-2.1.hum1.aarch64.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/p/python3.12-libs-3.12.16-2.2.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
-    size: 9699819
-    checksum: sha256:b6f1ea61179a99a81e94db7be49661214bbf6171b1fc151ee456c8c8259f859f
+    size: 9702891
+    checksum: sha256:896e1a7cddc1bfa443bf07ad6599052e4fd74cd5facf80c75e30a1ad0ce3dfe5
     name: python3.12-libs
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/aarch64/Packages/r/rust-1.99.1-2.hum1.aarch64.rpm
     repoid: public-hummingbird-aarch64-rpms
     size: 30411789
@@ -426,12 +426,12 @@ arches:
     checksum: sha256:7027bdde9a1a1904a687d7d16ae89a3015be5e0d70dcaed29132616e24000347
     name: pkgconf
     evr: 2.5.1-2.1.hum1
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/python3.12-3.12.16-2.1.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/python3.12-3.12.16-2.2.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
-    size: 20994904
-    checksum: sha256:1d2eb71ae3cb925cfa54f66a487892072ef590538918343cc444f1431a44d3d9
+    size: 21005627
+    checksum: sha256:cc1cf246c4611ce99958cf90584e62901f7087b2c0a64f4fdc57c1174ef42bcf
     name: python3.12
-    evr: 3.12.16-2.1.hum1
+    evr: 3.12.16-2.2.hum1
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/r/rust-1.99.1-2.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
     size: 268115333
@@ -693,27 +693,27 @@ arches:
     name: pkgconf-pkg-config
     evr: 2.5.1-2.1.hum1
     sourcerpm: pkgconf-2.5.1-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-3.12.16-2.1.hum1.x86_64.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-3.12.16-2.2.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
-    size: 33593
-    checksum: sha256:ee881f557fe6d0298583db27ca0cbd22e2a34fea2959aee29d1cafa04aa28819
+    size: 33602
+    checksum: sha256:3ad84d2888d753ebc481b775e405cc8dbdc3fb68745c89e2f068d0dce88cfc70
     name: python3.12
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-devel-3.12.16-2.1.hum1.x86_64.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-devel-3.12.16-2.2.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
     size: 338914
-    checksum: sha256:14f40579c751882ae28f85a29d12805d1302f2e64a7c128ca967f487109310a3
+    checksum: sha256:6760ccf72e0bc73ce50ce5c55269e2964f193a0f24d94dd8fff03fc067f08553
     name: python3.12-devel
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-libs-3.12.16-2.1.hum1.x86_64.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/p/python3.12-libs-3.12.16-2.2.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
-    size: 9930743
-    checksum: sha256:45ca77cae199353d1410029d214ecd14ff7e438261dbac7b2d9910bd7367a82a
+    size: 9935368
+    checksum: sha256:7502ababcec2d3c044aa2926f895d5322b94a2325190d6b7f1f3e3179b724636
     name: python3.12-libs
-    evr: 3.12.16-2.1.hum1
-    sourcerpm: python3.12-3.12.16-2.1.hum1.src.rpm
+    evr: 3.12.16-2.2.hum1
+    sourcerpm: python3.12-3.12.16-2.2.hum1.src.rpm
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/x86_64/Packages/r/rust-1.99.1-2.hum1.x86_64.rpm
     repoid: public-hummingbird-x86_64-rpms
     size: 32472706
@@ -849,12 +849,12 @@ arches:
     checksum: sha256:7027bdde9a1a1904a687d7d16ae89a3015be5e0d70dcaed29132616e24000347
     name: pkgconf
     evr: 2.5.1-2.1.hum1
-  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/python3.12-3.12.16-2.1.hum1.src.rpm
+  - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/p/python3.12-3.12.16-2.2.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
-    size: 20994904
-    checksum: sha256:1d2eb71ae3cb925cfa54f66a487892072ef590538918343cc444f1431a44d3d9
+    size: 21005627
+    checksum: sha256:cc1cf246c4611ce99958cf90584e62901f7087b2c0a64f4fdc57c1174ef42bcf
     name: python3.12
-    evr: 3.12.16-2.1.hum1
+    evr: 3.12.16-2.2.hum1
   - url: https://console.redhat.com/api/pulp-content/public-hummingbird/source/Packages/r/rust-1.99.1-2.hum1.src.rpm
     repoid: public-hummingbird-source-rpms
     size: 268115333
